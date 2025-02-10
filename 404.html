@@ -4,6 +4,7 @@
     <script>
         sessionStorage.redirect = window.location.href;
         const repoPath = window.location.pathname.split('/').slice(0, 2).join('/');
+        document.write(`<base href="${window.location.origin}${repoPath}/">`);
         window.location.replace(window.location.origin + repoPath);
     </script>
 </head>
