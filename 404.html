@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        sessionStorage.redirect = window.location.href;
+        const repoPath = window.location.pathname.split('/').slice(0, 2).join('/');
+        window.location.replace(window.location.origin + repoPath);
+    </script>
+</head>
+<body></body>
+</html>
