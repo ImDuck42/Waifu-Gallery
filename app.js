@@ -1,29 +1,19 @@
-// Cached DOM elements
 const nsfwToggle = document.getElementById('nsfwToggle');
 const categoryDropdown = document.getElementById('categoryDropdown');
 const waifuContainer = document.getElementById('waifu-container');
 const scrollBtn = document.querySelector('.scroll-top');
 
-// Panel Management
 let basePath = '';
 
-function togglePanel() {
-    document.getElementById('sidePanel').classList.toggle('active');
-}
+// Panel Management
+const togglePanel = () => document.getElementById('sidePanel').classList.toggle('active');
 
-// Scroll to Top
-function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+// Scroll Management
+const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
-// Scroll Button Visibility with Throttling
-let isScrolling;
 window.addEventListener('scroll', () => {
-    window.clearTimeout(isScrolling);
-    isScrolling = setTimeout(() => {
-        scrollBtn.classList.toggle('visible', window.scrollY > 300);
-    }, 100);
-});
+    scrollBtn.classList.toggle('visible', window.scrollY > 300);
+}, { passive: true });
 
 // Category Configuration
 const nsfwCategories = ['waifu', 'neko', 'trap', 'blowjob'];
@@ -31,37 +21,27 @@ const sfwCategories = ['waifu', 'neko', 'shinobu', 'megumin', 'bully', 'cuddle',
 const apiCache = new Map();
 
 function updateCategories() {
-    const isNSFW = nsfwToggle.checked;
-    const categories = isNSFW ? nsfwCategories : sfwCategories;
-
-    categoryDropdown.innerHTML = '<option value="" disabled selected>Select Category</option>';
-    categories.forEach(cat => {
-        const option = document.createElement('option');
-        option.value = cat;
-        option.textContent = `${cat.charAt(0).toUpperCase()}${cat.slice(1)}`;
-        categoryDropdown.appendChild(option);
-    });
+    const categories = nsfwToggle.checked ? nsfwCategories : sfwCategories;
+    categoryDropdown.innerHTML = categories.reduce((acc, cat) => 
+        acc + `<option value="${cat}">${cat.charAt(0).toUpperCase() + cat.slice(1)}</option>`
+    , '<option value="" disabled selected>Select Category</option>');
 }
 
 // URL Handling
-function updateURL(type, category) {
-    const newPath = `${basePath}/${type}/${category}`;
-    window.history.pushState({}, '', newPath);
-}
+const updateURL = (type, category) => 
+    window.history.pushState({}, '', `${basePath}/${type}/${category}`);
 
-function parseURL() {
-    const pathSegments = window.location.pathname.split('/').slice(2);
-    return {
-        type: pathSegments[0] || '',
-        category: pathSegments[1] || ''
-    };
-}
+const parseURL = () => {
+    const [type = '', category = ''] = window.location.pathname.split('/').slice(2);
+    return { type, category };
+};
 
 function validateAndApplyURLParams() {
     const { type, category } = parseURL();
-    const validTypes = ['nsfw', 'sfw'];
+    const validType = ['nsfw', 'sfw'].includes(type);
+    const validCategory = (type === 'nsfw' ? nsfwCategories : sfwCategories).includes(category);
     
-    if (!validTypes.includes(type) || !(type === 'nsfw' ? nsfwCategories : sfwCategories).includes(category)) {
+    if (!validType || !validCategory) {
         window.history.replaceState({}, '', basePath || '/');
         return false;
     }
@@ -99,7 +79,8 @@ async function fetchAndDisplayWaifus() {
     }
 
     try {
-        waifuContainer.innerHTML = '<div class="loading-skeleton"></div>'.repeat(9);
+        waifuContainer.innerHTML = Array.from({ length: 9 }, () => 
+            '<div class="loading-skeleton"></div>').join('');
         
         const response = await fetch(`https://api.waifu.pics/many/${type}/${category}`, {
             method: 'POST',
@@ -120,23 +101,22 @@ async function fetchAndDisplayWaifus() {
     }
 }
 
-function displayWaifus(files) {
+const displayWaifus = files => 
     waifuContainer.innerHTML = files.map(url => `
         <div class="image-wrapper">
             <img src="${url}" alt="Generated waifu" loading="lazy">
         </div>
     `).join('');
-}
 
 function handleError(error) {
     waifuContainer.innerHTML = `
         <div class="error-container">
             <div class="error-icon">
-                <img src="./assets/smthnwrong.png" alt="Smthnwrong">
+                <img src="./assets/smthnwrong.png" alt="Error">
             </div>
             <p class="error-text">Failed to generate waifus<br><small>${error.message || 'Unknown error'}</small></p>
             <button class="retry-btn" onclick="fetchAndDisplayWaifus()">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <svg viewBox="0 0 24 24" width="18" height="18">
                     <path d="M23 4v6h-6M1 20v-6h6"/>
                     <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
                 </svg>
@@ -147,25 +127,17 @@ function handleError(error) {
 
 // Initialization
 document.addEventListener('DOMContentLoaded', () => {
-    const initialPath = window.location.pathname;
-    const pathParts = initialPath.split('/');
+    const pathParts = window.location.pathname.split('/');
     basePath = pathParts[1] ? `/${pathParts[1]}` : '';
 
     if (sessionStorage.redirect) {
         const redirectUrl = new URL(sessionStorage.redirect);
-        const cleanPath = redirectUrl.pathname.replace(new RegExp(`^${basePath}`), '');
-        window.history.replaceState({}, '', `${basePath}${cleanPath}`);
+        window.history.replaceState({}, '', redirectUrl.pathname.replace(new RegExp(`^${basePath}`), ''));
         delete sessionStorage.redirect;
     }
 
-    if (nsfwToggle) {
-        nsfwToggle.addEventListener('change', updateCategories);
-    }
+    nsfwToggle?.addEventListener('change', updateCategories);
     updateCategories();
-    
-    if (!validateAndApplyURLParams()) {
-        categoryDropdown.value = '';
-    }
-    
+    validateAndApplyURLParams();
     window.addEventListener('popstate', validateAndApplyURLParams);
 });
