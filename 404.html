@@ -6,7 +6,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         
         if (urlParams.has('api')) {
-            window.location.replace('./indexdocs.html');
+            window.location.replace('indexdocs.html');
         } else {
             const repoPath = window.location.pathname.split('/').slice(0, 2).join('/');
             window.location.replace(window.location.origin + repoPath);
