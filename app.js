@@ -18,7 +18,7 @@ let isScrolling;
 function setupScrollButton() {
     scrollBtn = document.querySelector('.scroll-top');
     if (!scrollBtn) return;
-    
+
     window.addEventListener('scroll', () => {
         window.clearTimeout(isScrolling);
         isScrolling = setTimeout(() => {
@@ -62,7 +62,7 @@ function parseURL() {
 function validateAndApplyURLParams() {
     const { type, category } = parseURL();
     const validTypes = ['nsfw', 'sfw'];
-    
+
     if (!validTypes.includes(type) || !(type === 'nsfw' ? nsfwCategories : sfwCategories).includes(category)) {
         window.history.replaceState({}, '', basePath || '/');
         return false;
@@ -102,7 +102,7 @@ async function fetchAndDisplayWaifus() {
 
     try {
         waifuContainer.innerHTML = '<div class="loading-skeleton"></div>'.repeat(9);
-        
+
         const response = await fetch(`https://api.waifu.pics/many/${type}/${category}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -110,7 +110,7 @@ async function fetchAndDisplayWaifus() {
         });
 
         if (!response.ok) throw new Error(`API Error: ${response.status}`);
-        
+
         const { files } = await response.json();
         apiCache.set(cacheKey, files);
         displayWaifus(files);
@@ -153,7 +153,7 @@ function initializeApplication() {
     nsfwToggle = document.getElementById('nsfwToggle');
     categoryDropdown = document.getElementById('categoryDropdown');
     waifuContainer = document.getElementById('waifu-container');
-    
+
     // Set up the base path for GitHub Pages or other hosting environments
     const initialPath = window.location.pathname;
     const pathParts = initialPath.split('/');
@@ -171,18 +171,18 @@ function initializeApplication() {
     if (nsfwToggle) {
         nsfwToggle.addEventListener('change', updateCategories);
     }
-    
+
     // Initialize categories dropdown
     updateCategories();
-    
+
     // Check if URL has valid parameters
     if (!validateAndApplyURLParams()) {
         categoryDropdown.value = '';
     }
-    
+
     // Setup scroll button
     setupScrollButton();
-    
+
     // Set up history change listener
     window.addEventListener('popstate', validateAndApplyURLParams);
 }
