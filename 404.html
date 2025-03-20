@@ -8,7 +8,7 @@
         if (urlParams.has('api')) {
             window.location.replace('indexdocs.html');
         } else {
-            const repoPath = window.location.pathname.split('/').slice(0, 2).join('/');
+            const repoPath = window.location.pathname.split('/').slice(0, 3).join('/'); // Include repo name
             window.location.replace(window.location.origin + repoPath);
         }
     </script>
