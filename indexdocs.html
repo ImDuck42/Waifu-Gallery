@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +12,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="./stylesdocs.css">
 </head>
-
 <body>
     <nav class="main-nav">
         <div class="nav-container">
@@ -30,19 +28,14 @@
 
     <div class="content-container">
         <h1 class="page-title">API Documentation</h1>
-
+        
         <div class="docs-intro">
-            <p>The open and supported part of the waifu.pics API is incredibly easy to use. You can find detailed
-                information about how to utilize this in your application below.</p>
-            <p>If you have any issues or questions with the API, please create a <a
-                    href="https://github.com/Waifu-pics/waifu-api" target="_blank"
-                    style="color: var(--accent-primary); text-decoration: underline;">GitHub issue</a>.</p>
+            <p>The open and supported part of the waifu.pics API is incredibly easy to use. You can find detailed information about how to utilize this in your application below.</p>
+            <p>If you have any issues or questions with the API, please create a <a href="https://github.com/Waifu-pics/waifu-api" target="_blank" style="color: var(--accent-primary); text-decoration: underline;">GitHub issue</a>.</p>
             <br>
-            <p><strong>Note:</strong> We have switched the API URL to <code>https://api.waifu.pics</code> from
-                <code>https://waifu.pics/api</code>. While the old route still works, you should switch any existing
-                applications to use the newer URL.</p>
+            <p><strong>Note:</strong> We have switched the API URL to <code>https://api.waifu.pics</code> from <code>https://waifu.pics/api</code>. While the old route still works, you should switch any existing applications to use the newer URL.</p>
         </div>
-
+        
         <div class="docs-section">
             <h2 class="section-title">
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
@@ -52,9 +45,8 @@
                 </svg>
                 Available Categories
             </h2>
-            <p class="section-description">The API provides various image categories in both SFW (Safe for Work) and
-                NSFW (Not Safe for Work) classifications.</p>
-
+            <p class="section-description">The API provides various image categories in both SFW (Safe for Work) and NSFW (Not Safe for Work) classifications.</p>
+            
             <div class="card">
                 <h3 class="card-title">SFW Categories</h3>
                 <div class="category-grid">
@@ -91,7 +83,7 @@
                     <div class="category-item">cringe</div>
                 </div>
             </div>
-
+            
             <div class="card">
                 <h3 class="card-title">NSFW Categories</h3>
                 <div class="category-grid">
@@ -102,7 +94,7 @@
                 </div>
             </div>
         </div>
-
+        
         <div class="docs-section">
             <h2 class="section-title">
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
@@ -112,16 +104,16 @@
                 Endpoints
             </h2>
             <p class="section-description">The API provides two main endpoints for retrieving waifu images.</p>
-
+            
             <div class="card">
                 <h3 class="card-title">Get Single Image</h3>
                 <p>Receive one random image URL from your endpoint of choice.</p>
-
+                
                 <div class="endpoint">
                     <span class="endpoint-url">https://api.waifu.pics/type/category</span>
                     <span class="endpoint-method get">GET</span>
                 </div>
-
+                
                 <table class="parameter-table">
                     <tr>
                         <th>Parameter</th>
@@ -139,16 +131,15 @@
                         <td>The category of image to retrieve (see available categories above).</td>
                     </tr>
                 </table>
-
+                
                 <h4 style="margin-bottom: 0.75rem;">Example Response:</h4>
                 <div class="response-example">{
-                    "url": "https://i.waifu.pics/Tj6Wzwo.png"
-                    }</div>
-
+  "url": "https://i.waifu.pics/Tj6Wzwo.png"
+}</div>
+                
                 <div class="tip-box">
                     <div class="tip-box-title">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
-                            stroke-width="2">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="10"></circle>
                             <line x1="12" y1="8" x2="12" y2="12"></line>
                             <line x1="12" y1="16" x2="12.01" y2="16"></line>
@@ -158,16 +149,16 @@
                     <p>To get a random SFW "waifu" image: <code>https://api.waifu.pics/sfw/waifu</code></p>
                 </div>
             </div>
-
+            
             <div class="card">
                 <h3 class="card-title">Get Multiple Images</h3>
                 <p>Receive 30 unique images from a specific endpoint or category.</p>
-
+                
                 <div class="endpoint">
                     <span class="endpoint-url">https://api.waifu.pics/many/type/category</span>
                     <span class="endpoint-method post">POST</span>
                 </div>
-
+                
                 <table class="parameter-table">
                     <tr>
                         <th>Parameter</th>
@@ -185,7 +176,7 @@
                         <td>The category of image to retrieve (see available categories above).</td>
                     </tr>
                 </table>
-
+                
                 <h4 style="margin-bottom: 0.75rem; margin-top: 1.5rem;">Request Body:</h4>
                 <table class="parameter-table">
                     <tr>
@@ -199,38 +190,36 @@
                         <td>An array of URLs to exclude from the response (optional).</td>
                     </tr>
                 </table>
-
+                
                 <h4 style="margin-bottom: 0.75rem;">Example Request Body:</h4>
                 <div class="response-example">{
-                    "exclude": []
-                    }</div>
-
+  "exclude": []
+}</div>
+                
                 <h4 style="margin-bottom: 0.75rem;">Example Response:</h4>
                 <div class="response-example">{
-                    "files": [
-                    "https://i.waifu.pics/qUY7BBo.jpg",
-                    "https://i.waifu.pics/zP~YhRb.jpg",
-                    "https://i.waifu.pics/Q9ZlB-P.jpg",
-                    ...
-                    ]
-                    }</div>
-
+  "files": [
+    "https://i.waifu.pics/qUY7BBo.jpg",
+    "https://i.waifu.pics/zP~YhRb.jpg",
+    "https://i.waifu.pics/Q9ZlB-P.jpg",
+    ...
+  ]
+}</div>
+                
                 <div class="tip-box">
                     <div class="tip-box-title">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
-                            stroke-width="2">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="10"></circle>
                             <line x1="12" y1="8" x2="12" y2="12"></line>
                             <line x1="12" y1="16" x2="12.01" y2="16"></line>
                         </svg>
                         Tip
                     </div>
-                    <p>You can use the "exclude" parameter to avoid getting duplicate images when making multiple
-                        requests.</p>
+                    <p>You can use the "exclude" parameter to avoid getting duplicate images when making multiple requests.</p>
                 </div>
             </div>
         </div>
-
+        
         <div class="docs-section">
             <h2 class="section-title">
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
@@ -242,81 +231,78 @@
                 </svg>
                 Implementation Examples
             </h2>
-            <p class="section-description">Here are some examples of how to use the waifu.pics API in different
-                programming languages.</p>
-
+            <p class="section-description">Here are some examples of how to use the waifu.pics API in different programming languages.</p>
+            
             <div class="tab-container">
                 <div class="tabs">
                     <button class="tab active" onclick="changeTab(event, 'javascript')">JavaScript</button>
                     <button class="tab" onclick="changeTab(event, 'python')">Python</button>
                 </div>
-
+                
                 <div id="javascript" class="code-example">// Fetch a single image
-                    fetch('https://api.waifu.pics/sfw/waifu')
-                    .then(response => response.json())
-                    .then(data => {
-                    console.log(data.url);
-                    // Use the image URL as needed
-                    })
-                    .catch(error => console.error('Error fetching waifu:', error));
+fetch('https://api.waifu.pics/sfw/waifu')
+  .then(response => response.json())
+  .then(data => {
+    console.log(data.url);
+    // Use the image URL as needed
+  })
+  .catch(error => console.error('Error fetching waifu:', error));
 
-                    // Fetch multiple images
-                    fetch('https://api.waifu.pics/many/sfw/waifu', {
-                    method: 'POST',
-                    headers: {
-                    'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                    exclude: []
-                    })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                    console.log(data.files);
-                    // Process the array of image URLs
-                    })
-                    .catch(error => console.error('Error fetching multiple waifus:', error));
-                </div>
-
+// Fetch multiple images
+fetch('https://api.waifu.pics/many/sfw/waifu', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    exclude: []
+  })
+})
+  .then(response => response.json())
+  .then(data => {
+    console.log(data.files);
+    // Process the array of image URLs
+  })
+  .catch(error => console.error('Error fetching multiple waifus:', error));
+</div>
+                
                 <div id="python" class="code-example" style="display: none;">import requests
 
-                    # Fetch a single image
-                    def get_single_waifu(type="sfw", category="waifu"):
-                    response = requests.get(f"https://api.waifu.pics/{type}/{category}")
-                    if response.status_code == 200:
-                    return response.json()["url"]
-                    else:
-                    return f"Error: {response.status_code}"
+# Fetch a single image
+def get_single_waifu(type="sfw", category="waifu"):
+    response = requests.get(f"https://api.waifu.pics/{type}/{category}")
+    if response.status_code == 200:
+        return response.json()["url"]
+    else:
+        return f"Error: {response.status_code}"
 
-                    # Fetch multiple images
-                    def get_multiple_waifus(type="sfw", category="waifu", exclude=[]):
-                    payload = {"exclude": exclude}
-                    response = requests.post(
-                    f"https://api.waifu.pics/many/{type}/{category}",
-                    json=payload
-                    )
-                    if response.status_code == 200:
-                    return response.json()["files"]
-                    else:
-                    return f"Error: {response.status_code}"
+# Fetch multiple images
+def get_multiple_waifus(type="sfw", category="waifu", exclude=[]):
+    payload = {"exclude": exclude}
+    response = requests.post(
+        f"https://api.waifu.pics/many/{type}/{category}",
+        json=payload
+    )
+    if response.status_code == 200:
+        return response.json()["files"]
+    else:
+        return f"Error: {response.status_code}"
 
-                    # Example usage
-                    single_image = get_single_waifu()
-                    print(f"Single image: {single_image}")
+# Example usage
+single_image = get_single_waifu()
+print(f"Single image: {single_image}")
 
-                    multiple_images = get_multiple_waifus()
-                    print(f"Received {len(multiple_images)} images")
-                    for img in multiple_images[:3]:
-                    print(img) # Print the first 3 images
-                </div>
+multiple_images = get_multiple_waifus()
+print(f"Received {len(multiple_images)} images")
+for img in multiple_images[:3]:
+    print(img)  # Print the first 3 images
+</div>
             </div>
-
+            
             <div class="tip-box">
                 <div class="tip-box-title">
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-                        <polygon
-                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                        </polygon>
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                     </svg>
                     Best Practices
                 </div>
@@ -328,63 +314,54 @@
                 </ul>
             </div>
         </div>
-
+        
         <div class="docs-section">
             <h2 class="section-title">
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3L12 17" />
-                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3L12 17"/>
+                    <line x1="12" y1="17" x2="12.01" y2="17"/>
                 </svg>
                 FAQ
             </h2>
-
+            
             <div class="card" id="important">
                 <h3 class="card-title">Is this the OFFICIAL Documentation?</h3>
-                <p>NO it is NOT, the ORIGINAL site is</p><a href="https://waifu.pics" target="_blank"
-                    style="color: var(--accent-secondary); text-decoration: underline;">Waifu.pics</a>
+                <p>NO it is NOT, the ORIGINAL site is</p><a href="https://waifu.pics" target="_blank" style="color: var(--accent-secondary); text-decoration: underline;">Waifu.pics</a>
             </div>
             <div class="card">
                 <h3 class="card-title">What are the rate limits?</h3>
-                <p>The API currently does not have strict rate limits, but we ask that you use it responsibly. If you're
-                    making a large number of requests, consider implementing your own rate limiting.</p>
+                <p>The API currently does not have strict rate limits, but we ask that you use it responsibly. If you're making a large number of requests, consider implementing your own rate limiting.</p>
             </div>
-
+            
             <div class="card">
                 <h3 class="card-title">Can I use these images commercially?</h3>
-                <p>The images provided by waifu.pics come from various sources and may have different licensing terms.
-                    For commercial use, you should verify the license of each specific image.</p>
+                <p>The images provided by waifu.pics come from various sources and may have different licensing terms. For commercial use, you should verify the license of each specific image.</p>
             </div>
-
+            
             <div class="card">
                 <h3 class="card-title">Why am I getting duplicate images?</h3>
-                <p>When using the multiple images endpoint, use the "exclude" parameter to provide a list of URLs you've
-                    already received to avoid duplicates in subsequent requests.</p>
+                <p>When using the multiple images endpoint, use the "exclude" parameter to provide a list of URLs you've already received to avoid duplicates in subsequent requests.</p>
             </div>
-
+            
             <div class="card">
                 <h3 class="card-title">Are there other endpoints for different images?</h3>
-                <p>Currently, the endpoints listed in this documentation are the only supported endpoints. Check the
-                    GitHub repository for updates or new features.</p>
+                <p>Currently, the endpoints listed in this documentation are the only supported endpoints. Check the GitHub repository for updates or new features.</p>
             </div>
         </div>
     </div>
-
+    
     <footer class="footer">
         <div class="footer-content">
             <div class="social-links">
                 <a href="https://github.com/ImDuck42" target="_blank" class="social-link">
                     <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path
-                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
-                        </path>
+                        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
                     </svg>
                 </a>
                 <a href="https://github.com/Waifu-pics" target="_blank" class="social-link">
                     <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path
-                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.5a3.5 3.5 0 0 0-1-2.5c3.5-.4 7-1.8 7-7.5A5.75 5.75 0 0 0 19.5 4.5c.5-2-1-3.5-1-3.5S17 .5 14 2a13.5 13.5 0 0 0-7 0C4 .5 2.5 1 2.5 1s-1.5 1.5-1 3.5A5.75 5.75 0 0 0 1 10.5c0 5.7 3.5 7.1 7 7.5a3.5 3.5 0 0 0-1 2.5V22M12 22.5a10 10 0 0 0 0-20">
-                        </path>
+                        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.5a3.5 3.5 0 0 0-1-2.5c3.5-.4 7-1.8 7-7.5A5.75 5.75 0 0 0 19.5 4.5c.5-2-1-3.5-1-3.5S17 .5 14 2a13.5 13.5 0 0 0-7 0C4 .5 2.5 1 2.5 1s-1.5 1.5-1 3.5A5.75 5.75 0 0 0 1 10.5c0 5.7 3.5 7.1 7 7.5a3.5 3.5 0 0 0-1 2.5V22M12 22.5a10 10 0 0 0 0-20"></path>
                     </svg>
                 </a>
             </div>
@@ -394,6 +371,5 @@
         </div>
     </footer>
     <script src="./appdocs.js"></script>
-</body>
-
+    </body>
 </html>
