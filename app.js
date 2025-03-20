@@ -1,8 +1,5 @@
 // Cached DOM elements
-const nsfwToggle = document.getElementById('nsfwToggle');
-const categoryDropdown = document.getElementById('categoryDropdown');
-const waifuContainer = document.getElementById('waifu-container');
-const scrollBtn = document.querySelector('.scroll-top');
+let nsfwToggle, categoryDropdown, waifuContainer, scrollBtn;
 
 // Panel Management
 let basePath = '';
@@ -18,12 +15,17 @@ function scrollToTop() {
 
 // Scroll Button Visibility with Throttling
 let isScrolling;
-window.addEventListener('scroll', () => {
-    window.clearTimeout(isScrolling);
-    isScrolling = setTimeout(() => {
-        scrollBtn.classList.toggle('visible', window.scrollY > 300);
-    }, 100);
-});
+function setupScrollButton() {
+    scrollBtn = document.querySelector('.scroll-top');
+    if (!scrollBtn) return;
+    
+    window.addEventListener('scroll', () => {
+        window.clearTimeout(isScrolling);
+        isScrolling = setTimeout(() => {
+            scrollBtn.classList.toggle('visible', window.scrollY > 300);
+        }, 100);
+    });
+}
 
 // Category Configuration
 const nsfwCategories = ['waifu', 'neko', 'trap', 'blowjob'];
@@ -132,7 +134,7 @@ function handleError(error) {
     waifuContainer.innerHTML = `
         <div class="error-container">
             <div class="error-icon">
-                <img src="./assets/smthnwrong.png" alt="Smthnwrong">
+                <img src="./assets/smthnwrong.png" alt="Something went wrong">
             </div>
             <p class="error-text">Failed to generate waifus<br><small>${error.message || 'Unknown error'}</small></p>
             <button class="retry-btn" onclick="fetchAndDisplayWaifus()">
@@ -146,11 +148,18 @@ function handleError(error) {
 }
 
 // Initialization
-document.addEventListener('DOMContentLoaded', () => {
+function initializeApplication() {
+    // Get DOM elements after document is loaded
+    nsfwToggle = document.getElementById('nsfwToggle');
+    categoryDropdown = document.getElementById('categoryDropdown');
+    waifuContainer = document.getElementById('waifu-container');
+    
+    // Set up the base path for GitHub Pages or other hosting environments
     const initialPath = window.location.pathname;
     const pathParts = initialPath.split('/');
     basePath = pathParts[1] ? `/${pathParts[1]}` : '';
 
+    // Handle redirects (for 404 page)
     if (sessionStorage.redirect) {
         const redirectUrl = new URL(sessionStorage.redirect);
         const cleanPath = redirectUrl.pathname.replace(new RegExp(`^${basePath}`), '');
@@ -158,14 +167,25 @@ document.addEventListener('DOMContentLoaded', () => {
         delete sessionStorage.redirect;
     }
 
+    // Setup event listeners
     if (nsfwToggle) {
         nsfwToggle.addEventListener('change', updateCategories);
     }
+    
+    // Initialize categories dropdown
     updateCategories();
     
+    // Check if URL has valid parameters
     if (!validateAndApplyURLParams()) {
         categoryDropdown.value = '';
     }
     
+    // Setup scroll button
+    setupScrollButton();
+    
+    // Set up history change listener
     window.addEventListener('popstate', validateAndApplyURLParams);
-});
+}
+
+// Run initialization when DOM is loaded
+document.addEventListener('DOMContentLoaded', initializeApplication);
