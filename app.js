@@ -149,7 +149,7 @@ function handleError(error) {
 
 // URL Redirection Logic
 function handleRedirects() {
-    const currentPath = window.location.pathname.toLowerCase().replace(/\/$/, ''); // Normalize path
+    const currentPath = window.location.pathname;
 
     if (currentPath.endsWith('/api')) {
         window.location.replace(`${basePath}/documentation/indexdocs.html`);
