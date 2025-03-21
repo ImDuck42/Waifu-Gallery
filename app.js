@@ -153,7 +153,7 @@ function handleRedirects() {
 
     if (currentPath.endsWith('/api')) {
         window.location.replace(`${basePath}/documentation/indexdocs.html`);
-    } else if (currentPath.endsWith('/contact')) {
+    } else if (currentPath.endsWith('/support')) {
         window.location.replace(`${basePath}/contact/indexcontact.html`);
     }
 }
