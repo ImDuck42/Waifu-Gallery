@@ -149,14 +149,10 @@ function handleError(error) {
 function handleRedirects() {
     const currentPath = window.location.pathname;
 
-    console.log(currentPath);
-
     if (currentPath.endsWith('/api') || currentPath.endsWith('/api/')) {
         window.location.replace(`${basePath}/documentation/indexdocs.html`);
-        console.log(currentPath);
     } else if (currentPath.endsWith('/contact') || currentPath.endsWith('/contact/')) {
         window.location.replace(`${basePath}/contact/indexcontact.html`);
-        console.log(currentPath);
     }
 }
 
