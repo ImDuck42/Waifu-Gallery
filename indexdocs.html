@@ -2,35 +2,43 @@
 <html lang="en">
 
 <head>
+    <!-- Metadata and external resources -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Official documentation for the waifu.pics API">
+    <meta name="description" content="Unofficial documentation for the waifu.pics API">
     <meta name="theme-color" content="#8c5eff">
-    <link rel="icon" type="image/png" href="assets/kurukuruAPNG.png">
+    <link rel="icon" type="image/png" href="./assets/kurukuruAPNG.png">
     <title>API Documentation | Waifu Gallery</title>
+    <!-- Preconnect and load fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <!-- Link to external stylesheet -->
     <link rel="stylesheet" href="./stylesdocs.css">
 </head>
 
 <body>
+    <!-- Navigation bar -->
     <nav class="main-nav">
         <div class="nav-container">
             <h1 class="logo">
                 <a href="./"><span>✨</span> Waifu Gallery</a>
             </h1>
             <div class="nav-links">
-                <a href="./">Home</a>
+                <!-- Navigation links -->
+                <a href="./indexcontact.html">Contact</a>
                 <a href="#" class="active">API</a>
                 <a href="https://github.com/ImDuck42" target="_blank">GitHub</a>
             </div>
         </div>
     </nav>
 
+    <!-- Main content container -->
     <div class="content-container">
+        <!-- Page title -->
         <h1 class="page-title">API Documentation</h1>
         
+        <!-- Introduction section -->
         <div class="docs-intro">
             <p>The open and supported part of the waifu.pics API is incredibly easy to use. You can find detailed information about how to utilize this in your application below.</p>
             <p>If you have any issues or questions with the API, please create a <a href="https://github.com/Waifu-pics/waifu-api" target="_blank" style="color: var(--accent-primary); text-decoration: underline;">GitHub issue</a>.</p>
@@ -38,8 +46,10 @@
             <p><strong>Note:</strong> We have switched the API URL to <code>https://api.waifu.pics</code> from <code>https://waifu.pics/api</code>. While the old route still works, you should switch any existing applications to use the newer URL.</p>
         </div>
         
+        <!-- Available categories section -->
         <div class="docs-section">
             <h2 class="section-title">
+                <!-- Icon for the section -->
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
                     <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
                     <line x1="8" y1="21" x2="16" y2="21"></line>
@@ -49,9 +59,11 @@
             </h2>
             <p class="section-description">The API provides various image categories in both SFW (Safe for Work) and NSFW (Not Safe for Work) classifications.</p>
             
+            <!-- SFW categories card -->
             <div class="card">
                 <h3 class="card-title">SFW Categories</h3>
                 <div class="category-grid">
+                    <!-- List of SFW categories -->
                     <div class="category-item">waifu</div>
                     <div class="category-item">neko</div>
                     <div class="category-item">shinobu</div>
@@ -86,9 +98,11 @@
                 </div>
             </div>
             
+            <!-- NSFW categories card -->
             <div class="card">
                 <h3 class="card-title">NSFW Categories</h3>
                 <div class="category-grid">
+                    <!-- List of NSFW categories -->
                     <div class="category-item">waifu</div>
                     <div class="category-item">neko</div>
                     <div class="category-item">trap</div>
@@ -97,8 +111,10 @@
             </div>
         </div>
         
+        <!-- Endpoints section -->
         <div class="docs-section">
             <h2 class="section-title">
+                <!-- Icon for the section -->
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                     <circle cx="12" cy="7" r="4"></circle>
@@ -107,15 +123,18 @@
             </h2>
             <p class="section-description">The API provides two main endpoints for retrieving waifu images.</p>
             
+            <!-- Single image endpoint -->
             <div class="card">
                 <h3 class="card-title">Get Single Image</h3>
                 <p>Receive one random image URL from your endpoint of choice.</p>
                 
+                <!-- Endpoint details -->
                 <div class="endpoint">
                     <span class="endpoint-url">https://api.waifu.pics/type/category</span>
                     <span class="endpoint-method get">GET</span>
                 </div>
                 
+                <!-- Parameters table -->
                 <table class="parameter-table">
                     <tr>
                         <th>Parameter</th>
@@ -134,13 +153,16 @@
                     </tr>
                 </table>
                 
+                <!-- Example response -->
                 <h4 style="margin-bottom: 0.75rem;">Example Response:</h4>
                 <div class="response-example">{
   "url": "https://i.waifu.pics/Tj6Wzwo.png"
 }</div>
                 
+                <!-- Tip box -->
                 <div class="tip-box">
                     <div class="tip-box-title">
+                        <!-- Icon for the tip -->
                         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="10"></circle>
                             <line x1="12" y1="8" x2="12" y2="12"></line>
@@ -152,15 +174,18 @@
                 </div>
             </div>
             
+            <!-- Multiple images endpoint -->
             <div class="card">
                 <h3 class="card-title">Get Multiple Images</h3>
                 <p>Receive 30 unique images from a specific endpoint or category.</p>
                 
+                <!-- Endpoint details -->
                 <div class="endpoint">
                     <span class="endpoint-url">https://api.waifu.pics/many/type/category</span>
                     <span class="endpoint-method post">POST</span>
                 </div>
                 
+                <!-- Parameters table -->
                 <table class="parameter-table">
                     <tr>
                         <th>Parameter</th>
@@ -179,6 +204,7 @@
                     </tr>
                 </table>
                 
+                <!-- Example request body -->
                 <h4 style="margin-bottom: 0.75rem; margin-top: 1.5rem;">Request Body:</h4>
                 <table class="parameter-table">
                     <tr>
@@ -198,6 +224,7 @@
   "exclude": []
 }</div>
                 
+                <!-- Example response -->
                 <h4 style="margin-bottom: 0.75rem;">Example Response:</h4>
                 <div class="response-example">{
   "files": [
@@ -208,8 +235,10 @@
   ]
 }</div>
                 
+                <!-- Tip box -->
                 <div class="tip-box">
                     <div class="tip-box-title">
+                        <!-- Icon for the tip -->
                         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="10"></circle>
                             <line x1="12" y1="8" x2="12" y2="12"></line>
@@ -222,6 +251,7 @@
             </div>
         </div>
         
+        <!-- Implementation examples section -->
         <div class="docs-section">
             <h2 class="section-title">
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
@@ -317,6 +347,7 @@ for img in multiple_images[:3]:
             </div>
         </div>
         
+        <!-- FAQ section -->
         <div class="docs-section">
             <h2 class="section-title">
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
@@ -353,10 +384,13 @@ for img in multiple_images[:3]:
         </div>
     </div>
     
+    <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
+            <!-- Social links -->
             <div class="social-links">
                 <a href="https://github.com/ImDuck42" target="_blank" class="social-link">
+                    <!-- GitHub icon -->
                     <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
                     </svg>
@@ -367,12 +401,14 @@ for img in multiple_images[:3]:
                     </svg>
                 </a>
             </div>
+            <!-- Copyright -->
             <div class="copyright">
                 █ 2025 Waifu Gallery. No rights reserved.
             </div>
         </div>
     </footer>
     
+    <!-- Link to external JavaScript -->
     <script src="./appdocs.js"></script>
-    </body>
+</body>
 </html>

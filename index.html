@@ -2,28 +2,36 @@
 <html lang="en">
 
 <head>
+    <!-- Metadata and external resources -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A modern waifu image generator with multiple categories">
+    <meta name="description" content="A modern waifu image fetcher from multiple categories">
     <meta name="theme-color" content="#8c5eff">
-    <link rel="icon" type="image/png" href="assets/kurukuruAPNG.png">
+    <link rel="icon" type="image/png" href="./assets/kurukuruAPNG.png">
     <title>Waifu Gallery</title>
+    <!-- Preconnect to optimize font loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <!-- Main stylesheet -->
     <link rel="stylesheet" href="./styles.css">
     <script>
+        // Dynamically set the base URL for relative links
         const repoPath = window.location.pathname.split('/').slice(0, 2).join('/');
         document.write(`<base href="${window.location.origin}${repoPath}/">`);
     </script>
 </head>
 
 <body>
+    <!-- Navigation bar -->
     <nav class="main-nav">
         <div class="nav-container">
+            <!-- Logo with link to the homepage -->
             <h1 class="logo">
                 <a href="./"><span>✨</span> Waifu Gallery</a>
             </h1>
+            <!-- Button to toggle the settings panel -->
             <button class="nav-toggle" aria-label="Open settings" onclick="togglePanel()">
                 <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M3 12h18M3 6h18M3 18h18" />
@@ -32,9 +40,11 @@
         </div>
     </nav>
 
+    <!-- Sidebar for gallery settings -->
     <aside class="control-panel" id="sidePanel">
         <div class="panel-header">
             <h2>Gallery Settings</h2>
+            <!-- Close button for the settings panel -->
             <button class="close-btn" onclick="togglePanel()" aria-label="Close settings">
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M18 6L6 18M6 6l12 12" />
@@ -43,6 +53,7 @@
         </div>
 
         <div class="panel-content">
+            <!-- Toggle for NSFW mode -->
             <div class="setting-group">
                 <label class="setting-label">Content Type</label>
                 <label class="toggle-switch">
@@ -52,6 +63,7 @@
                 </label>
             </div>
 
+            <!-- Dropdown for selecting image categories -->
             <div class="setting-group">
                 <label class="setting-label">Image Category</label>
                 <select id="categoryDropdown" class="styled-select">
@@ -59,15 +71,17 @@
                 </select>
             </div>
 
+            <!-- Button to fetch and display images -->
             <button class="generate-btn" id="generateBtn" onclick="fetchAndDisplayWaifus()">
                 <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path
                         d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
                 </svg>
-                Generate Images
+                Fetch Images
             </button>
         </div>
 
+        <!-- Link to API documentation -->
         <a href="./indexdocs.html" class="documentation-btn" id="documentationBtn" target="_blank"
             rel="noopener noreferrer">
             <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
@@ -80,8 +94,10 @@
             <span>API Documentation</span>
         </a>
 
+        <!-- Footer with social links -->
         <div class="panel-footer">
             <div class="social-links">
+                <!-- GitHub link -->
                 <a href="https://github.com/ImDuck42" target="_blank" rel="noopener noreferrer"
                     class="social-link tooltip" data-tooltip="GitHub">
                     <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
@@ -89,6 +105,7 @@
                             d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.11.795-.26.795-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.4 3-.405 1.02.005 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.195.694.8.576C20.565 21.795 24 17.3 24 12c0-6.63-5.37-12-12-12z" />
                     </svg>
                 </a>
+                <!-- YouTube link -->
                 <a href="https://www.yout-ube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer"
                     class="social-link tooltip" data-tooltip="YouTube Tutorial">
                     <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
@@ -96,6 +113,7 @@
                             d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
                     </svg>
                 </a>
+                <!-- Discord link -->
                 <a href="https://discord.com/users/977936340186443826" target="_blank" rel="noopener noreferrer"
                     class="social-link tooltip" data-tooltip="Discord">
                     <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
@@ -107,21 +125,25 @@
         </div>
     </aside>
 
+    <!-- Main content area -->
     <main class="gallery-container" id="waifu-container">
+        <!-- Placeholder for when no images are fetched -->
         <div class="error-container">
             <div class="error-icon">
                 <img src="./assets/oops.png" alt="Oops">
             </div>
-            <p class="error-text">Select a category and generate some images!</p>
+            <p class="error-text">Select a category and fetch some images!</p>
         </div>
     </main>
 
+    <!-- Scroll-to-top button -->
     <button class="scroll-top" onclick="scrollToTop()" aria-label="Scroll to top">
         <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="18 15 12 9 6 15"></polyline>
         </svg>
     </button>
 
+    <!-- Main JavaScript file -->
     <script src="./app.js"></script>
 </body>
 </html>
