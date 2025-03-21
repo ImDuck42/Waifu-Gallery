@@ -91,8 +91,6 @@ async function fetchAndDisplayWaifus() {
         return;
     }
 
-    if (window.innerWidth <= 768) togglePanel();
-
     const cacheKey = `${type}-${category}`;
     if (apiCache.has(cacheKey)) {
         displayWaifus(apiCache.get(cacheKey));
