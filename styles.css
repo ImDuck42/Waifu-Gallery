@@ -339,7 +339,7 @@ input:checked + .slider::before {
   background: var(--bg-secondary);
   box-shadow: var(--card-shadow);
   transition: var(--transition);
-  aspect-ratio: 3/4;
+  aspect-ratio: auto;
 }
 
 .image-wrapper:hover {
