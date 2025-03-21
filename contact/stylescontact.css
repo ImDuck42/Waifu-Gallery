@@ -108,8 +108,16 @@ background-clip: text;
 -webkit-text-fill-color: transparent;
 }
 
-.docs-section {
+.contact-section {
 margin-bottom: 3rem;
+}
+
+.contact-intro {
+    background: var(--bg-secondary);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 2rem;
+    box-shadow: var(--card-shadow);
 }
 
 .section-title {
