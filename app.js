@@ -154,7 +154,7 @@ function handleRedirects() {
     if (currentPath.endsWith('/api')) {
         window.location.replace(`${basePath}/documentation/indexdocs.html`);
         console.log(currentPath);
-    } else if (currentPath.endsWith('/contact')) {
+    } else if (currentPath.endsWith('/contact') || currentPath.endsWith('/contact/')) {
         window.location.replace(`${basePath}/contact/indexcontact.html`);
         console.log(currentPath);
     }
