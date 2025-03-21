@@ -147,6 +147,17 @@ function handleError(error) {
         </div>`;
 }
 
+// URL Redirection Logic
+function handleRedirects() {
+    const currentPath = window.location.pathname;
+
+    if (currentPath.endsWith('/api')) {
+        window.location.replace(`${basePath}/documentation/indexdocs.html`);
+    } else if (currentPath.endsWith('/contact')) {
+        window.location.replace(`${basePath}/contact/indexcontact.html`);
+    }
+}
+
 // Initialization
 function initializeApplication() {
     // Get DOM elements after document is loaded
@@ -166,6 +177,9 @@ function initializeApplication() {
         window.history.replaceState({}, '', `${basePath}${cleanPath}`);
         delete sessionStorage.redirect;
     }
+
+    // Handle redirects (for specific paths)
+    handleRedirects();
 
     // Setup event listeners
     if (nsfwToggle) {
