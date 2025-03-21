@@ -149,12 +149,11 @@ function handleError(error) {
 
 // URL Redirection Logic
 function handleRedirects() {
-    const currentPath = window.location.pathname;
+    const currentPath = window.location.pathname.toLowerCase().replace(/\/$/, ''); // Normalize path
 
     if (currentPath.endsWith('/api')) {
         window.location.replace(`${basePath}/documentation/indexdocs.html`);
-    } 
-    if (currentPath.endsWith('/contact')) {
+    } else if (currentPath.endsWith('/contact')) {
         window.location.replace(`${basePath}/contact/indexcontact.html`);
     }
 }
