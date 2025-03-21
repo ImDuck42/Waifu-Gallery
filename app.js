@@ -149,10 +149,8 @@ function handleError(error) {
 function handleRedirects() {
     const currentPath = window.location.pathname;
 
-    if (currentPath.endsWith('/api')) {
+    if (currentPath.endsWith('/help')) {
         window.location.replace(`${basePath}/documentation/indexdocs.html`);
-    } else if (currentPath.endsWith('/contact')) {
-        window.location.replace(`${basePath}/contact/indexcontact.html`);
     }
 }
 
