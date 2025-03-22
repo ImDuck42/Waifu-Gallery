@@ -172,7 +172,7 @@ async function fetchAndDisplayWaifus() {
         apiCache.set(cacheKey, files);
         displayWaifus(files);
         updateURL(type, category);
-
+        
     } catch (error) {
         window.history.replaceState({}, '', basePath || '/');
         handleError(error);
@@ -184,8 +184,7 @@ function displayWaifus(files) {
         <div class="image-wrapper">
             <img src="${url}" alt="Generated waifu" loading="lazy">
         </div>
-    `).join('');
-}
+    `).join('');}
 
 // Display custom  images
 function displayCustomWaifus(type, categoryName) {
@@ -461,6 +460,19 @@ function showImportError(message) {
     importStatus.classList.add('error');
     importStatus.classList.remove('success');
     importStatus.style.display = 'block';
+}
+
+// Add this function to randomize images
+function randomizeImages() {
+    const images = Array.from(waifuContainer.querySelectorAll('.image-wrapper'));
+    if (images.length === 0) return;
+
+    // Shuffle images
+    const shuffledImages = images.sort(() => Math.random() - 0.5);
+
+    // Clear and re-append shuffled images
+    waifuContainer.innerHTML = '';
+    shuffledImages.forEach(image => waifuContainer.appendChild(image));
 }
 
 // Initialization

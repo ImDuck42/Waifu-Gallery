@@ -560,6 +560,36 @@ input:checked + .slider::before {
   height: 24px;
 }
 
+.randomize-btn {
+  display: none; /* Hidden by default */
+  position: fixed;
+  bottom: 6rem;
+  right: 2rem;
+  background: var(--bg-element);
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: var(--transition);
+  box-shadow: var(--card-shadow);
+}
+
+.randomize-btn:hover {
+  transform: translateY(-3px);
+  background: linear-gradient(120deg, var(--accent-primary), var(--accent-secondary));
+  opacity: 1;
+}
+
+.randomize-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
 /* Footer */
 .panel-footer {
   padding: 1rem;
