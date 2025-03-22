@@ -349,10 +349,15 @@ async function importCustomSource() {
             fileNameDisplay.style.opacity = '1'; // Reset for future visibility
         }, 250); // Wait for fade-out to complete
 
+        // Clear file selection after success message
+        setTimeout(() => {
+            clearFileSelection();
+        }, 2000); // Ensure it runs after the success message fade-out
+
         // If a category is selected, update the gallery
         if (categoryDropdown.value) {
             fetchAndDisplayWaifus();
-        }
+        }        
     } catch (error) {
         showImportError("Error importing source: " + error.message);
     }
