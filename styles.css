@@ -672,7 +672,7 @@ input:checked + .slider::before {
 .error-icon {
   font-size: 2.5rem;
   color: var(--error-color);
-  filter: drop-shadow(0 0 8px rgba(255, 71, 87, 0.3));
+  filter: drop-shadow(0 0 8px rgba(140, 94, 255, 0.3));
 }
 
 .error-icon img {
