@@ -1,5 +1,6 @@
 // Cached DOM elements
 let nsfwToggle, categoryDropdown, waifuContainer, scrollBtn;
+let jsonFileInput, selectedFileName, fileNameDisplay, importSourceBtn, importStatus, clearFileBtn;
 
 // Panel Management
 let basePath = '';
@@ -32,17 +33,56 @@ const nsfwCategories = ['waifu', 'neko', 'trap', 'blowjob'];
 const sfwCategories = ['waifu', 'neko', 'shinobu', 'megumin', 'bully', 'cuddle', 'cry', 'hug', 'awoo', 'kiss', 'lick', 'pat', 'smug', 'bonk', 'yeet', 'blush', 'smile', 'wave', 'highfive', 'handhold', 'nom', 'bite', 'glomp', 'slap', 'kill', 'kick', 'happy', 'wink', 'poke', 'dance', 'cringe'];
 const apiCache = new Map();
 
+// Custom Source Configuration
+const customSources = {
+    sfw: new Map(),
+    nsfw: new Map()
+};
+
+// Legacy function - use updateCategoriesWithCustomSources instead
 function updateCategories() {
+    // Now just redirect to the more comprehensive function
+    updateCategoriesWithCustomSources();
+}
+
+// Update categories dropdown with custom sources
+function updateCategoriesWithCustomSources() {
     const isNSFW = nsfwToggle.checked;
     const categories = isNSFW ? nsfwCategories : sfwCategories;
-
+    const customCats = isNSFW ? Array.from(customSources.nsfw.keys()) : Array.from(customSources.sfw.keys());
+    
+    // Reset dropdown
     categoryDropdown.innerHTML = '<option value="" disabled selected>Select Category</option>';
-    categories.forEach(cat => {
-        const option = document.createElement('option');
-        option.value = cat;
-        option.textContent = `${cat.charAt(0).toUpperCase()}${cat.slice(1)}`;
-        categoryDropdown.appendChild(option);
-    });
+    
+    // Group 1: API categories
+    if (categories.length > 0) {
+        const apiGroup = document.createElement('optgroup');
+        apiGroup.label = 'API Categories';
+        
+        categories.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat;
+            option.textContent = `${cat.charAt(0).toUpperCase()}${cat.slice(1)}`;
+            apiGroup.appendChild(option);
+        });
+        
+        categoryDropdown.appendChild(apiGroup);
+    }
+    
+    // Group 2: Custom categories
+    if (customCats.length > 0) {
+        const customGroup = document.createElement('optgroup');
+        customGroup.label = 'Custom Categories';
+        
+        customCats.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = 'custom:' + cat;
+            option.textContent = `${cat.charAt(0).toUpperCase()}${cat.slice(1)}`;
+            customGroup.appendChild(option);
+        });
+        
+        categoryDropdown.appendChild(customGroup);
+    }
 }
 
 // URL Handling
@@ -62,15 +102,24 @@ function parseURL() {
 function validateAndApplyURLParams() {
     const { type, category } = parseURL();
     const validTypes = ['nsfw', 'sfw'];
-
-    if (!validTypes.includes(type) || !(type === 'nsfw' ? nsfwCategories : sfwCategories).includes(category)) {
+    
+    // Extract the base category name if it's a custom category
+    const isCustomCategory = category && category.startsWith('custom:');
+    const baseCategoryName = isCustomCategory ? category.substring(7) : category;
+    
+    // Determine if the category is valid
+    const isValidCategory = isCustomCategory 
+        ? (type === 'nsfw' ? customSources.nsfw.has(baseCategoryName) : customSources.sfw.has(baseCategoryName))
+        : (type === 'nsfw' ? nsfwCategories.includes(baseCategoryName) : sfwCategories.includes(baseCategoryName));
+    
+    if (!validTypes.includes(type) || !isValidCategory) {
         window.history.replaceState({}, '', basePath || '/');
         return false;
     }
 
     nsfwToggle.checked = type === 'nsfw';
-    updateCategories();
-    categoryDropdown.value = category;
+    updateCategoriesWithCustomSources();
+    categoryDropdown.value = isCustomCategory ? `custom:${baseCategoryName}` : baseCategoryName;
     fetchAndDisplayWaifus();
     return true;
 }
@@ -88,6 +137,14 @@ async function fetchAndDisplayWaifus() {
                 </div>
                 <p class="error-text">Please select a category first!</p>
             </div>`;
+        return;
+    }
+    
+    // Check if this is a custom category
+    if (category.startsWith('custom:')) {
+        const customCatName = category.substring(7); // Remove 'custom:' prefix
+        displayCustomWaifus(type, customCatName);
+        updateURL(type, category); // Still update the URL
         return;
     }
 
@@ -128,6 +185,18 @@ function displayWaifus(files) {
     `).join('');
 }
 
+// Display custom waifu images
+function displayCustomWaifus(type, categoryName) {
+    const categoryData = customSources[type].get(categoryName);
+    
+    if (!categoryData || !categoryData.images || categoryData.images.length === 0) {
+        handleError(new Error(`No images found in custom category: ${categoryName}`));
+        return;
+    }
+    
+    displayWaifus(categoryData.images);
+}
+
 function handleError(error) {
     waifuContainer.innerHTML = `
         <div class="error-container">
@@ -156,6 +225,171 @@ function handleRedirects() {
     }
 }
 
+// Setup Custom Source Import
+function setupCustomSourceImport() {
+    jsonFileInput = document.getElementById('jsonFileInput');
+    selectedFileName = document.getElementById('selectedFileName');
+    fileNameDisplay = document.getElementById('fileNameDisplay');
+    importSourceBtn = document.getElementById('importSourceBtn');
+    importStatus = document.getElementById('importStatus');
+    clearFileBtn = document.getElementById('clearFileBtn');
+  
+    if (!jsonFileInput || !selectedFileName || !fileNameDisplay || !importSourceBtn || !importStatus || !clearFileBtn) {
+        console.error('Custom source import elements not found');
+        return;
+    }
+  
+    jsonFileInput.addEventListener('change', handleFileSelection);
+    importSourceBtn.addEventListener('click', importCustomSource);
+    clearFileBtn.addEventListener('click', clearFileSelection);
+}
+
+// Handle file selection
+function handleFileSelection(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+  
+    // Update UI to show selected file
+    selectedFileName.textContent = file.name;
+    fileNameDisplay.style.display = 'flex';
+    importSourceBtn.disabled = false;
+}
+
+// Clear file selection
+function clearFileSelection() {
+    jsonFileInput.value = '';
+    selectedFileName.textContent = 'No file selected';
+    fileNameDisplay.style.display = 'none';
+    importSourceBtn.disabled = true;
+    importStatus.style.display = 'none';
+    importStatus.classList.remove('success', 'error');
+}
+
+// Import and process custom source
+async function importCustomSource() {
+    const file = jsonFileInput.files[0];
+    if (!file) return;
+  
+    try {
+        // Read file content
+        const fileContent = await readFileAsText(file);
+        const sourceData = JSON.parse(fileContent);
+  
+        // Validate source structure
+        if (!validateSourceFormat(sourceData)) {
+            showImportError("Invalid source format. Please use the correct template.");
+            return;
+        }
+  
+        // Process and store custom sources
+        processCustomSources(sourceData);
+      
+        // Update UI for successful import
+        showImportSuccess(`Successfully imported ${countTotalImages(sourceData)} images in ${countCategories(sourceData)} categories.`);
+      
+        // If a category is selected, update the gallery
+        if (categoryDropdown.value) {
+            fetchAndDisplayWaifus();
+        }
+      
+    } catch (error) {
+        showImportError("Error importing source: " + error.message);
+    }
+}
+
+// Read file as text
+function readFileAsText(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.onerror = (e) => reject(new Error("Failed to read file"));
+        reader.readAsText(file);
+    });
+}
+
+// Validate source format
+function validateSourceFormat(data) {
+    return data && 
+           typeof data === 'object' && 
+           Array.isArray(data.sfw) && 
+           Array.isArray(data.nsfw) &&
+           data.sfw.every(category => validateCategory(category)) &&
+           data.nsfw.every(category => validateCategory(category));
+}
+
+// Validate category structure
+function validateCategory(category) {
+    return category && 
+           typeof category === 'object' && 
+           typeof category.name === 'string' && 
+           Array.isArray(category.images) &&
+           category.images.every(url => typeof url === 'string');
+}
+
+// Process custom sources
+function processCustomSources(data) {
+    // Reset existing custom sources
+    customSources.sfw.clear();
+    customSources.nsfw.clear();
+    
+    // Process SFW categories
+    data.sfw.forEach(category => {
+        if (category.name && Array.isArray(category.images) && category.images.length > 0) {
+            customSources.sfw.set(category.name, {
+                name: category.name,
+                description: category.description || '',
+                images: [...category.images]
+            });
+        }
+    });
+    
+    // Process NSFW categories
+    data.nsfw.forEach(category => {
+        if (category.name && Array.isArray(category.images) && category.images.length > 0) {
+            customSources.nsfw.set(category.name, {
+                name: category.name,
+                description: category.description || '',
+                images: [...category.images]
+            });
+        }
+    });
+    
+    // Update the categories dropdown with new options
+    updateCategoriesWithCustomSources();
+}
+
+// Count total images in source
+function countTotalImages(data) {
+    let count = 0;
+    if (data.sfw) data.sfw.forEach(cat => count += (cat.images?.length || 0));
+    if (data.nsfw) data.nsfw.forEach(cat => count += (cat.images?.length || 0));
+    return count;
+}
+
+// Count categories in source
+function countCategories(data) {
+    let count = 0;
+    if (data.sfw) count += data.sfw.length;
+    if (data.nsfw) count += data.nsfw.length;
+    return count;
+}
+
+// Show import success message
+function showImportSuccess(message) {
+    importStatus.textContent = message;
+    importStatus.classList.add('success');
+    importStatus.classList.remove('error');
+    importStatus.style.display = 'block';
+}
+
+// Show import error message
+function showImportError(message) {
+    importStatus.textContent = message;
+    importStatus.classList.add('error');
+    importStatus.classList.remove('success');
+    importStatus.style.display = 'block';
+}
+
 // Initialization
 function initializeApplication() {
     // Get DOM elements after document is loaded
@@ -181,11 +415,14 @@ function initializeApplication() {
 
     // Setup event listeners
     if (nsfwToggle) {
-        nsfwToggle.addEventListener('change', updateCategories);
+        nsfwToggle.addEventListener('change', updateCategoriesWithCustomSources); // Changed this line
     }
 
     // Initialize categories dropdown
-    updateCategories();
+    updateCategoriesWithCustomSources(); // Changed to use the comprehensive function
+    
+    // Set up custom source import
+    setupCustomSourceImport();
 
     // Check if URL has valid parameters
     if (!validateAndApplyURLParams()) {

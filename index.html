@@ -79,7 +79,40 @@
                 </svg>
                 Fetch Images
             </button>
-            Add custom Source Support here
+
+            <!-- Custom Source Import -->
+            <div class="setting-group">
+                <label class="setting-label">Import Custom Source</label>
+                <div class="file-upload-container">
+                    <label for="jsonFileInput" class="file-upload-btn">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <span>Select JSON File</span>
+                    </label>
+                    <input type="file" id="jsonFileInput" accept=".json" style="display: none;">
+                </div>
+                <div id="fileNameDisplay" class="file-name-display" style="display: none;">
+                    <span id="selectedFileName">No file selected</span>
+                    <button id="clearFileBtn" class="clear-file-btn">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <button id="importSourceBtn" class="import-btn" disabled>
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Import Source
+                </button>
+                <div id="importStatus" class="import-status"></div>
+            </div>
         </div>
 
         <!-- Link to API + Contact page -->
@@ -130,7 +163,7 @@
         <!-- Placeholder for when no images are fetched -->
         <div class="error-container">
             <div class="error-icon">
-                <img src="./assets/oops.png" alt="Oops">
+                <img src="./assets/kurukuruAPNG.png" alt="Oops">
             </div>
             <p class="error-text">Select a category and fetch some images!</p>
         </div>

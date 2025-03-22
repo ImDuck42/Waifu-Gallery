@@ -1,0 +1,69 @@
+{
+"Custom Source Template": [
+    {
+        "name": "Custom Source Template",
+        "description": "A template for creating custom sources",
+        "info": "You can freely choose the names but do NOT change sfw/nsfw. The description is optional. URL's must be direct links to images.",
+        "imagehosts": [
+            "https://postimages.org/, Alows for bulk copying direct links to images",
+            "https://example.com, Feel free to reach out if you know of any other image hosts"
+        ],
+        "version": "69.42.0",
+        "author": "ImDuck42(Creator)"
+    }
+],
+
+
+"sfw": [
+    {
+        "name": "nature",
+        "description": "Natural landscapes and wildlife",
+        "images": [
+            "https://example.com/nature1.jpg",
+            "https://example.com/nature2.jpg"
+        ]
+    },
+    {
+        "name": "anime",
+        "description": "Anime artwork and characters",
+        "images": [
+            "https://example.com/anime1.png",
+            "https://example.com/anime2.jpg"
+        ]
+    },
+    {
+        "name": "architecture",
+        "description": "Building designs and structures",
+        "images": [
+            "https://example.com/building1.jpg",
+            "https://example.com/building2.png"
+        ]
+    }
+  ],
+"nsfw": [
+    {
+        "name": "adult content",
+        "description": "Explicit adult material",
+        "images": [
+            "https://example.com/nsfw1.jpg",
+            "https://example.com/nsfw2.png"
+        ]
+    },
+    {
+        "name": "violence",
+        "description": "Graphic violent content",
+        "images": [
+            "https://example.com/violence1.jpg",
+            "https://example.com/violence2.png"
+        ]
+    },
+    {
+        "name": "sensitive",
+        "description": "Other sensitive content",
+        "images": [
+            "https://example.com/sensitive1.jpg",
+            "https://example.com/sensitive2.png"
+        ]
+    }
+]
+}

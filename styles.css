@@ -322,6 +322,126 @@ input:checked + .slider::before {
   box-shadow: 0 4px 15px rgba(140, 94, 255, 0.2);
 }
 
+/* File Upload Styling */
+.file-upload-container {
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.file-upload-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.875rem;
+  background: var(--bg-element);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius);
+  color: var(--text-primary);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+}
+
+.file-upload-btn:hover {
+  border-color: var(--accent-primary);
+  background: rgba(140, 94, 255, 0.1);
+}
+
+.file-name-display {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  background: var(--bg-element);
+  border-radius: var(--border-radius-sm);
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  overflow: hidden;
+}
+
+#selectedFileName {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 85%;
+}
+
+.clear-file-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.clear-file-btn:hover {
+  color: var(--error-color);
+  background: rgba(255, 71, 87, 0.1);
+}
+
+.import-btn {
+  width: 100%;
+  padding: 0.875rem;
+  background: var(--bg-element);
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.import-btn:enabled {
+  background: linear-gradient(120deg, var(--accent-primary), var(--accent-secondary));
+  border: none;
+}
+
+.import-btn:enabled:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(140, 94, 255, 0.3);
+}
+
+.import-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.import-status {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  padding: 0.5rem;
+  border-radius: var(--border-radius-sm);
+  text-align: center;
+  display: none;
+}
+
+.import-status.success {
+  display: block;
+  background: rgba(46, 204, 113, 0.1);
+  color: var(--success-color);
+  border: 1px solid rgba(46, 204, 113, 0.3);
+}
+
+.import-status.error {
+  display: block;
+  background: rgba(255, 71, 87, 0.1);
+  color: var(--error-color);
+  border: 1px solid rgba(255, 71, 87, 0.3);
+}
+
 /* Gallery */
 .gallery-container {
   display: grid;
