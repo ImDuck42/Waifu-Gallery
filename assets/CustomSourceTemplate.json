@@ -3,11 +3,6 @@
     {
         "name": "Custom Source Template",
         "description": "A template for creating custom sources",
-        "info": "You can freely choose the names but do NOT change sfw/nsfw (at most, reduce to: | 'sfw': [], | or nsfw: [], |). The description is optional. URL's must be direct links to images.",
-        "imagehosts": [
-            "https://postimages.org/, Alows for bulk copying direct links to images",
-            "https://example.com, Feel free to reach out if you know of any other image hosts"
-        ],
         "version": "69.42.0",
         "author": "ImDuck42(Creator)"
     }
@@ -30,16 +25,8 @@
             "https://example.com/anime1.png",
             "https://example.com/anime2.jpg"
         ]
-    },
-    {
-        "name": "architecture",
-        "description": "Building designs and structures",
-        "images": [
-            "https://example.com/building1.jpg",
-            "https://example.com/building2.png"
-        ]
     }
-  ],
+],
 "nsfw": [
     {
         "name": "adult content",
@@ -47,14 +34,6 @@
         "images": [
             "https://example.com/nsfw1.jpg",
             "https://example.com/nsfw2.png"
-        ]
-    },
-    {
-        "name": "violence",
-        "description": "Graphic violent content",
-        "images": [
-            "https://example.com/violence1.jpg",
-            "https://example.com/violence2.png"
         ]
     },
     {

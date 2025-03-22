@@ -347,6 +347,213 @@ for img in multiple_images[:3]:
             </div>
         </div>
         
+        <!-- Custom Source Section -->
+        <div class="docs-section">
+            <h2 class="section-title">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
+                    <path d="M14 8V2"/>
+                    <path d="M12 18v-6"/>
+                    <path d="M8 15h8"/>
+                </svg>
+                Custom Sources
+            </h2>
+            <p class="section-description">Create and use your own image collections with Waifu Gallery by creating custom source configurations.</p>
+            
+            <!-- Custom Source Introduction -->
+            <div class="card">
+                <h3 class="card-title">What are Custom Sources?</h3>
+                <p>Custom sources allow you to define your own collections of images that can be used with the Waifu Gallery API. This feature enables you to integrate personal image sets or create specialized categories beyond the default offerings.</p>
+                
+                <p>Custom sources are defined using a JSON template that specifies categories and image URLs in both SFW (Safe for Work) and NSFW (Not Safe for Work) classifications.</p>
+            </div>
+            
+            <!-- Template Structure -->
+            <div class="card">
+                <h3 class="card-title">Custom Source Template</h3>
+                <p>To create a custom source, you'll need to follow the JSON template structure below:</p>
+                
+                <h4 style="margin: 1rem 0 0.5rem 0;">Template Structure:</h4>
+                <div class="response-example">{
+"Custom Source Template": [
+    {
+        "name": "Custom Source Template",
+        "description": "A template for creating custom sources",
+        "version": "69.42.0",
+        "author": "ImDuck42(Creator)"
+    }
+],
+
+"sfw": [
+    {
+        "name": "nature",
+        "description": "Natural landscapes and wildlife",
+        "images": [
+            "https://example.com/nature1.jpg",
+            "https://example.com/nature2.jpg"
+        ]
+    },
+    {
+        "name": "anime",
+        "description": "Anime artwork and characters",
+        "images": [
+            "https://example.com/anime1.png",
+            "https://example.com/anime2.jpg"
+        ]
+    }
+],
+"nsfw": [
+    {
+        "name": "adult content",
+        "description": "Explicit adult material",
+        "images": [
+            "https://example.com/nsfw1.jpg",
+            "https://example.com/nsfw2.png"
+        ]
+    },
+    {
+        "name": "sensitive",
+        "description": "Other sensitive content",
+        "images": [
+            "https://example.com/sensitive1.jpg",
+            "https://example.com/sensitive2.png"
+        ]
+    }
+]
+}</div>
+                
+                <div class="tip-box">
+                    <div class="tip-box-title">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                        Important Note
+                    </div>
+                    <p>Do not change the "sfw", "nsfw" and "Custom Source Template" keys in the template. You can leave either section empty if you don't have images for that classification (e.g., <code>"sfw": [],</code>), but the keys must remain in the JSON structure.</p>
+                </div>
+            </div>
+            
+            <!-- Field Descriptions -->
+            <div class="card">
+                <h3 class="card-title">Field Descriptions</h3>
+                
+                <table class="parameter-table">
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>name</td>
+                        <td>string</td>
+                        <td>Name of your custom source or category</td>
+                    </tr>
+                    <tr>
+                        <td>description</td>
+                        <td>string</td>
+                        <td>Optional brief description</td>
+                    </tr>
+                    <tr>
+                        <td>version</td>
+                        <td>string</td>
+                        <td>Version number for your source template</td>
+                    </tr>
+                    <tr>
+                        <td>author</td>
+                        <td>string</td>
+                        <td>Your name or identifier</td>
+                    </tr>
+                    <tr>
+                        <td>images</td>
+                        <td>string[]</td>
+                        <td>Array of direct URLs to your images</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <!-- How to Implement -->
+            <div class="card">
+                <h3 class="card-title">Implementing Custom Sources</h3>
+                <p>To use custom sources with the Waifu Gallery API, follow these steps:</p>
+                
+                <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+                    <li>Create your JSON template following the structure above or copy the provided template <a href="./../assets/CustomSourceTemplate.json" target="_blank" style="color: var(--accent-primary); text-decoration: underline;">here</a>.</li>
+                    <li>Host your images on a reliable image hosting service</li>
+                    <li>Ensure all image URLs are direct links to the images themselves</li>
+                    <li>Import the file into your applications sidebar and press Import Source</li>
+                </ul>
+                
+                <div class="tip-box">
+                    <div class="tip-box-title">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                        Note
+                    </div>
+                    <p>Your imported Source will be saved in Local Storage. To remove it, either replace it with a different source or press the red X button on the right of the Import button. It will only be clickable if you have contents in your Local Storage</p>
+                </div>
+
+                <h4 style="margin: 1rem 0 0.5rem 0;">Recommended Image Hosts:</h4>
+                <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+                    <li><a href="https://postimages.org/" target="_blank" style="color: var(--accent-primary); text-decoration: underline;">Postimages.org</a> - Allows for bulk copying direct links to images</li>
+                    <li><a href="https://imgur.com/" target="_blank" style="color: var(--accent-primary); text-decoration: underline;">Imgur</a> - Use direct image links (ending with file extension)</li>
+                </ul>
+            </div>
+                        
+            <!-- Best Practices -->
+            <div class="card">
+                <h3 class="card-title">Best Practices</h3>
+                
+                <div class="tip-box">
+                    <div class="tip-box-title">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                        Tips for Custom Sources
+                    </div>
+                    <ul style="margin-left: 1.5rem; color: var(--text-secondary);">
+                        <li>Use direct image links that end with file extensions (.jpg, .png, .gif, etc.)</li>
+                        <li>Organize your images into clearly defined categories</li>
+                        <li>Keep SFW and NSFW content strictly separated</li>
+                        <li>Regularly check that your image links remain valid</li>
+                    </ul>
+
+                </div>
+            </div>
+            
+            <!-- Troubleshooting -->
+            <div class="card">
+                <h3 class="card-title">Troubleshooting</h3>
+                
+                <table class="parameter-table">
+                    <tr>
+                        <th>Issue</th>
+                        <th>Possible Solution</th>
+                    </tr>
+                    <tr>
+                        <td>Images not loading</td>
+                        <td>Verify that your URLs are direct links to image files. Some hosting services may use indirect links that don't work with the API.</td>
+                    </tr>
+                    <tr>
+                        <td>JSON parse errors</td>
+                        <td>Check your JSON syntax for missing commas, brackets, or quotes. Use a JSON validator to confirm your template is valid.</td>
+                    </tr>
+                    <tr>
+                        <td>Categories not found</td>
+                        <td>Ensure your category names match exactly in your code and in your template (case-sensitive).</td>
+                    </tr>
+                    <tr>
+                        <td>CORS issues</td>
+                        <td>Some image hosts may block cross-origin requests. Choose hosts that allow CORS for API usage.</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
         <!-- FAQ section -->
         <div class="docs-section">
             <h2 class="section-title">
