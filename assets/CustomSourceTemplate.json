@@ -3,7 +3,7 @@
     {
         "name": "Custom Source Template",
         "description": "A template for creating custom sources",
-        "info": "You can freely choose the names but do NOT change sfw/nsfw. The description is optional. URL's must be direct links to images.",
+        "info": "You can freely choose the names but do NOT change sfw/nsfw (at most, reduce to: | 'sfw': [], | or nsfw: [], |). The description is optional. URL's must be direct links to images.",
         "imagehosts": [
             "https://postimages.org/, Alows for bulk copying direct links to images",
             "https://example.com, Feel free to reach out if you know of any other image hosts"

@@ -176,6 +176,7 @@ a {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  padding-top: 1rem;
 }
 
 .setting-label {
@@ -387,6 +388,11 @@ input:checked + .slider::before {
   background: rgba(255, 71, 87, 0.1);
 }
 
+.button-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
 .import-btn {
   width: 100%;
   padding: 0.875rem;
@@ -415,6 +421,33 @@ input:checked + .slider::before {
 }
 
 .import-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.clearLocalStorage-btn {
+  width: 20%;
+  padding: 0.875rem;
+  background: var(--error-color);
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.clearLocalStorage-btn:enabled:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 94, 94, 0.3);
+}
+
+.clearLocalStorage-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }

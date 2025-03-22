@@ -2,6 +2,8 @@
 let nsfwToggle, categoryDropdown, waifuContainer, scrollBtn;
 let jsonFileInput, selectedFileName, fileNameDisplay, importSourceBtn, importStatus, clearFileBtn;
 
+checkLocalStorageData()
+
 // Panel Management
 let basePath = '';
 
@@ -185,7 +187,7 @@ function displayWaifus(files) {
     `).join('');
 }
 
-// Display custom waifu images
+// Display custom  images
 function displayCustomWaifus(type, categoryName) {
     const categoryData = customSources[type].get(categoryName);
     
@@ -233,7 +235,7 @@ function setupCustomSourceImport() {
     importSourceBtn = document.getElementById('importSourceBtn');
     importStatus = document.getElementById('importStatus');
     clearFileBtn = document.getElementById('clearFileBtn');
-  
+
     if (!jsonFileInput || !selectedFileName || !fileNameDisplay || !importSourceBtn || !importStatus || !clearFileBtn) {
         console.error('Custom source import elements not found');
         return;
@@ -242,6 +244,57 @@ function setupCustomSourceImport() {
     jsonFileInput.addEventListener('change', handleFileSelection);
     importSourceBtn.addEventListener('click', importCustomSource);
     clearFileBtn.addEventListener('click', clearFileSelection);
+}
+
+// Add this function to check if localStorage has data
+function checkLocalStorageData() {
+    const clearLocalStorageBtn = document.getElementById('clearLocalStorageBtn');
+    if (!clearLocalStorageBtn) return;
+    
+    try {
+        const savedData = localStorage.getItem('customSources');
+        if (savedData) {
+            const parsedData = JSON.parse(savedData);
+            // Enable button if there are any custom sources
+            const hasSFWData = parsedData.sfw && parsedData.sfw.length > 0;
+            const hasNSFWData = parsedData.nsfw && parsedData.nsfw.length > 0;
+            
+            clearLocalStorageBtn.disabled = !(hasSFWData || hasNSFWData);
+        } else {
+            // Disable button if no custom sources found
+            clearLocalStorageBtn.disabled = true;
+        }
+    } catch (error) {
+        console.error('Error checking localStorage data:', error);
+        clearLocalStorageBtn.disabled = true;
+    }
+}
+
+// Storage Management Functions
+function clearLocalStorage() {
+    try {
+        localStorage.removeItem('customSources');
+        customSources.sfw.clear();
+        customSources.nsfw.clear();
+        updateCategoriesWithCustomSources();
+        showImportSuccess("Local storage cleared successfully!");
+        
+        if (categoryDropdown.value.startsWith('')) {
+            categoryDropdown.value = '';
+            waifuContainer.innerHTML = `
+                <div class="error-container">
+                    <div class="error-icon">
+                        <img src="./assets/kurukuruAPNG.png" alt="Cleared">
+                    </div>
+                    <p class="error-text">Storage cleared! Select a new category.</p>
+                </div>`;
+        }
+
+        checkLocalStorageData()
+
+    } catch (error) {
+        showImportError("Failed to clear storage: " + error.message);
+    }
 }
 
 // Handle file selection
@@ -269,7 +322,7 @@ function clearFileSelection() {
 async function importCustomSource() {
     const file = jsonFileInput.files[0];
     if (!file) return;
-  
+    
     try {
         // Read file content
         const fileContent = await readFileAsText(file);
@@ -291,7 +344,7 @@ async function importCustomSource() {
         if (categoryDropdown.value) {
             fetchAndDisplayWaifus();
         }
-      
+
     } catch (error) {
         showImportError("Error importing source: " + error.message);
     }
@@ -354,8 +407,15 @@ function processCustomSources(data) {
         }
     });
     
+    // Save to localStorage (new addition)
+    localStorage.setItem('customSources', JSON.stringify({
+        sfw: Array.from(customSources.sfw.entries()),
+        nsfw: Array.from(customSources.nsfw.entries())
+    }));
+    
     // Update the categories dropdown with new options
     updateCategoriesWithCustomSources();
+    checkLocalStorageData()
 }
 
 // Count total images in source
@@ -380,6 +440,19 @@ function showImportSuccess(message) {
     importStatus.classList.add('success');
     importStatus.classList.remove('error');
     importStatus.style.display = 'block';
+    importStatus.style.opacity = '1';
+
+    // Keep it visible for 2 seconds
+    setTimeout(() => {
+        importStatus.style.transition = 'opacity 0.5s';
+        importStatus.style.opacity = '0';
+
+        // Hide the element completely after fade-out
+        setTimeout(() => {
+            importStatus.style.display = 'none';
+            importStatus.style.opacity = '1'; // Reset for future messages
+        }, 500); // Wait for fade-out to complete
+    }, 2000);
 }
 
 // Show import error message
@@ -410,6 +483,20 @@ function initializeApplication() {
         delete sessionStorage.redirect;
     }
 
+    // Load custom sources from localStorage
+    try {
+        const savedData = localStorage.getItem('customSources');
+        if (savedData) {
+        const parsedData = JSON.parse(savedData);
+        customSources.sfw = new Map(parsedData.sfw);
+        customSources.nsfw = new Map(parsedData.nsfw);
+        updateCategoriesWithCustomSources();
+        }
+    } catch (error) {
+        console.error('Error loading saved sources:', error);
+        localStorage.removeItem('customSources');
+    }
+
     // Handle redirects (for specific paths)
     handleRedirects();
 
@@ -422,7 +509,7 @@ function initializeApplication() {
     updateCategoriesWithCustomSources(); // Changed to use the comprehensive function
     
     // Set up custom source import
-    setupCustomSourceImport();
+    setupCustomSourceImport(); 
 
     // Check if URL has valid parameters
     if (!validateAndApplyURLParams()) {
