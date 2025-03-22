@@ -927,7 +927,11 @@ input:checked + .slider::before {
     left: 1rem;
     right: 1rem;
   }
-  
+  .randomize-btn {
+    right: 1rem;
+    bottom: 5rem;
+  }
+
   .scroll-top {
     right: 1rem;
     bottom: 1rem;
