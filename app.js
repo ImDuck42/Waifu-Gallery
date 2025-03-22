@@ -338,12 +338,21 @@ async function importCustomSource() {
       
         // Update UI for successful import
         showImportSuccess(`Successfully imported ${countTotalImages(sourceData)} images in ${countCategories(sourceData)} categories.`);
-      
+        
+        // Hide fileNameDisplay after successful import with fade-out effect
+        fileNameDisplay.style.transition = 'opacity 0.5s';
+        fileNameDisplay.style.opacity = '0';
+
+        // Hide the element completely after fade-out
+        setTimeout(() => {
+            fileNameDisplay.style.display = 'none';
+            fileNameDisplay.style.opacity = '1'; // Reset for future visibility
+        }, 250); // Wait for fade-out to complete
+
         // If a category is selected, update the gallery
         if (categoryDropdown.value) {
             fetchAndDisplayWaifus();
         }
-
     } catch (error) {
         showImportError("Error importing source: " + error.message);
     }
