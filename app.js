@@ -592,3 +592,29 @@ checkLocalStorageData();
 
 // Run initialization when DOM is loaded
 document.addEventListener('DOMContentLoaded', initializeApplication)
+
+
+
+
+// Still need to correctly implement
+const fileUploadContainer = document.getElementById('fileUploadContainer');
+const jsonFileInput = document.getElementById('jsonFileInput');
+
+fileUploadContainer.addEventListener('dragover', (event) => {
+    event.preventDefault();
+    fileUploadContainer.classList.add('drag-over');
+});
+
+fileUploadContainer.addEventListener('dragleave', () => {
+    fileUploadContainer.classList.remove('drag-over');
+});
+
+fileUploadContainer.addEventListener('drop', (event) => {
+    event.preventDefault();
+    fileUploadContainer.classList.remove('drag-over');
+    const files = event.dataTransfer.files;
+    jsonFileInput.files = files;
+    document.getElementById('selectedFileName').textContent = files[0].name;
+    document.getElementById('fileNameDisplay').style.display = 'block';
+    document.getElementById('importSourceBtn').disabled = false;
+});

@@ -390,16 +390,21 @@ input:checked + .slider::before {
   margin-bottom: 0.5rem;
   font-size: 0.875rem;
   overflow: hidden;
+  position: relative;
 }
 
 #selectedFileName {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 85%;
+  max-width: calc(100% - 30px);
 }
 
 .clear-file-btn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
   background: none;
   border: none;
   color: var(--text-secondary);
@@ -415,6 +420,12 @@ input:checked + .slider::before {
 .clear-file-btn:hover {
   color: var(--error-color);
   background: rgba(255, 71, 87, 0.1);
+}
+
+.file-upload-container.drag-over {
+  border: 2px dashed var(--accent-primary);
+  border-radius: var(--border-radius);
+  background: rgba(140, 94, 255, 0.1);
 }
 
 /* Import/Export Controls */
