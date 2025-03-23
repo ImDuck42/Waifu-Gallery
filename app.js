@@ -208,7 +208,14 @@ const state = {
     // Handle custom category selection
     if (category.includes(':')) {
       const [sourceName, customCatName] = category.split(':');
-      displayCustomWaifus(type, customCatName);
+      const customCategoryData = state.customSources[type].get(customCatName);
+  
+      if (!customCategoryData || !customCategoryData.images || !customCategoryData.images.length) {
+        showError(`No images found in custom category: ${customCatName}`);
+        return;
+      }
+  
+      displayWaifus(customCategoryData.images);
       updateURL(type, category);
       return;
     }
