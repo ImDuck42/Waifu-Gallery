@@ -161,8 +161,8 @@ const state = {
   function parseURL() {
     const pathSegments = window.location.pathname.split('/').slice(2);
     return {
-      type: pathSegments[0] || '',
-      category: pathSegments[1] || ''
+      type: decodeURIComponent(pathSegments[0] || ''),
+      category: decodeURIComponent(pathSegments[1] || '')
     };
   }
   
@@ -174,14 +174,17 @@ const state = {
     const isCustomCategory = category && category.includes(':');
     const [sourceName, baseCategoryName] = isCustomCategory ? category.split(':') : [null, category];
     
+    // Decode category names to handle spaces
+    const decodedBaseCategoryName = decodeURIComponent(baseCategoryName || '');
+    
     // Determine if the category is valid
     const isValidCategory = isCustomCategory 
       ? (type === 'nsfw' 
-          ? state.customSources.nsfw.has(baseCategoryName) 
-          : state.customSources.sfw.has(baseCategoryName))
+          ? state.customSources.nsfw.has(decodedBaseCategoryName) 
+          : state.customSources.sfw.has(decodedBaseCategoryName))
       : (type === 'nsfw' 
-          ? CATEGORIES.nsfw.includes(baseCategoryName) 
-          : CATEGORIES.sfw.includes(baseCategoryName));
+          ? CATEGORIES.nsfw.includes(decodedBaseCategoryName) 
+          : CATEGORIES.sfw.includes(decodedBaseCategoryName));
     
     if (!validTypes.includes(type) || !isValidCategory) {
       window.history.replaceState({}, '', state.basePath || '/');
@@ -190,7 +193,7 @@ const state = {
   
     state.nsfwToggle.checked = type === 'nsfw';
     updateCategoriesWithCustomSources();
-    state.categoryDropdown.value = isCustomCategory ? `${sourceName}:${baseCategoryName}` : baseCategoryName;
+    state.categoryDropdown.value = isCustomCategory ? `${sourceName}:${decodedBaseCategoryName}` : decodedBaseCategoryName;
     fetchAndDisplayWaifus();
     return true;
   }
@@ -208,14 +211,7 @@ const state = {
     // Handle custom category selection
     if (category.includes(':')) {
       const [sourceName, customCatName] = category.split(':');
-      const customCategoryData = state.customSources[type].get(customCatName);
-  
-      if (!customCategoryData || !customCategoryData.images || !customCategoryData.images.length) {
-        showError(`No images found in custom category: ${customCatName}`);
-        return;
-      }
-  
-      displayWaifus(customCategoryData.images);
+      displayCustomWaifus(type, customCatName);
       updateURL(type, category);
       return;
     }
