@@ -348,7 +348,7 @@ for img in multiple_images[:3]:
         </div>
         
         <!-- Custom Source Section -->
-        <div class="docs-section">
+        <div class="docs-section" id="custom-source">
             <h2 class="section-title">
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
@@ -375,52 +375,55 @@ for img in multiple_images[:3]:
                 
                 <h4 style="margin: 1rem 0 0.5rem 0;">Template Structure:</h4>
                 <div class="response-example">{
-"Custom Source Template": [
-    {
-        "name": "Custom Source Template",
-        "description": "A template for creating custom sources",
-        "version": "69.42.0",
-        "author": "ImDuck42(Creator)"
-    }
-],
+    "SourceInfo": [
+        {
+            "title": "Custom Source Template",
+            "description": "A template for creating custom sources",
+            "version": "69.42.0",
+            "author": "ImDuck42(Creator)",
+            "contact": "hu7ao on Discord"
+        }
+    ],
 
-"sfw": [
-    {
-        "name": "nature",
-        "description": "Natural landscapes and wildlife",
-        "images": [
-            "https://example.com/nature1.jpg",
-            "https://example.com/nature2.jpg"
-        ]
-    },
-    {
-        "name": "anime",
-        "description": "Anime artwork and characters",
-        "images": [
-            "https://example.com/anime1.png",
-            "https://example.com/anime2.jpg"
-        ]
-    }
-],
-"nsfw": [
-    {
-        "name": "adult content",
-        "description": "Explicit adult material",
-        "images": [
-            "https://example.com/nsfw1.jpg",
-            "https://example.com/nsfw2.png"
-        ]
-    },
-    {
-        "name": "sensitive",
-        "description": "Other sensitive content",
-        "images": [
-            "https://example.com/sensitive1.jpg",
-            "https://example.com/sensitive2.png"
-        ]
-    }
-]
-}</div>
+
+    "sfw": [
+        {
+            "category": "nature",
+            "information": "Natural landscapes and wildlife",
+            "images": [
+                "https://example.com/nature1.jpg",
+                "https://example.com/nature2.jpg"
+            ]
+        },
+        {
+            "category": "anime",
+            "information": "Anime artwork and characters",
+            "images": [
+                "https://example.com/anime1.png",
+                "https://example.com/anime2.jpg"
+            ]
+        }
+    ],
+    "nsfw": [
+        {
+            "category": "adultContent",
+            "information": "Explicit adult material",
+            "images": [
+                "https://example.com/nsfw1.jpg",
+                "https://example.com/nsfw2.png"
+            ]
+        },
+        {
+            "category": "sensitive",
+            "information": "Other sensitive content",
+            "images": [
+                "https://example.com/sensitive1.jpg",
+                "https://example.com/sensitive2.png"
+            ]
+        }
+    ]
+}
+                </div>
                 
                 <div class="tip-box">
                     <div class="tip-box-title">
@@ -446,14 +449,14 @@ for img in multiple_images[:3]:
                         <th>Description</th>
                     </tr>
                     <tr>
-                        <td>name</td>
+                        <td>title & name</td>
                         <td>string</td>
                         <td>Name of your custom source or category</td>
                     </tr>
                     <tr>
-                        <td>description</td>
+                        <td>description & information</td>
                         <td>string</td>
-                        <td>Optional brief description</td>
+                        <td>Optional brief description of your source or category</td>
                     </tr>
                     <tr>
                         <td>version</td>
@@ -464,6 +467,11 @@ for img in multiple_images[:3]:
                         <td>author</td>
                         <td>string</td>
                         <td>Your name or identifier</td>
+                    </tr>
+                    <tr>
+                        <td>contact</td>
+                        <td>string</td>
+                        <td>Optional contact information</td>
                     </tr>
                     <tr>
                         <td>images</td>
@@ -489,12 +497,12 @@ for img in multiple_images[:3]:
                 <h3 class="card-title">Implementing Custom Sources</h3>
                 <p>To use custom sources with the Waifu Gallery Website, follow these steps:</p>
                 
-                <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+                <ol style="margin-left: 1.5rem; margin-bottom: 1rem;">
                     <li>Create your JSON template following the structure above or copy the provided template <a href="./../assets/CustomSourceTemplate.json" target="_blank" style="color: var(--accent-primary); text-decoration: underline;">here</a>.</li>
                     <li>Host your images on a reliable image hosting service</li>
                     <li>Ensure all image URLs are direct links to the images themselves</li>
                     <li>Import the file into your applications sidebar and press Import Source</li>
-                </ul>
+                </ol>
                 
                 <div class="tip-box">
                     <div class="tip-box-title">
@@ -585,6 +593,12 @@ for img in multiple_images[:3]:
                 <p>The API currently does not have strict rate limits, but we ask that you use it responsibly. If you're making a large number of requests, consider implementing your own rate limiting.</p>
             </div>
             
+            <div class="card">
+                <h3 class="card-title">Can I upload my own Images?</h3>
+                <p><strong>Waifu.pics API:</strong> You can Submit your Images <a href="https://waifu.pics/upload" target="_blank" style="color: var(--accent-primary); text-decoration: underline;">here</a> but from my experience the submit Form doesn't work most of the time.</p>
+                <p><strong>Waifu Gallery Website:</strong> Yes, just use a custom source as described <a href="#custom-source" style="color: var(--accent-primary); text-decoration: underline;">here</a>.</p>
+            </div>
+
             <div class="card">
                 <h3 class="card-title">Can I use these images commercially?</h3>
                 <p>The images provided by waifu.pics come from various sources and may have different licensing terms. For commercial use, you should verify the license of each specific image.</p>

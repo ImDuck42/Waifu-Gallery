@@ -1,48 +1,49 @@
 {
-"Custom Source Template": [
-    {
-        "name": "Custom Source Template",
-        "description": "A template for creating custom sources",
-        "version": "69.42.0",
-        "author": "ImDuck42(Creator)"
-    }
-],
+    "sourceInfo": [
+        {
+            "title": "Custom Source Template",
+            "description": "A template for creating custom sources",
+            "version": "69.42.0",
+            "author": "ImDuck42(Creator)",
+            "contact": "hu7ao on Discord"
+        }
+    ],
 
 
-"sfw": [
-    {
-        "name": "nature",
-        "description": "Natural landscapes and wildlife",
-        "images": [
-            "https://example.com/nature1.jpg",
-            "https://example.com/nature2.jpg"
-        ]
-    },
-    {
-        "name": "anime",
-        "description": "Anime artwork and characters",
-        "images": [
-            "https://example.com/anime1.png",
-            "https://example.com/anime2.jpg"
-        ]
-    }
-],
-"nsfw": [
-    {
-        "name": "adult content",
-        "description": "Explicit adult material",
-        "images": [
-            "https://example.com/nsfw1.jpg",
-            "https://example.com/nsfw2.png"
-        ]
-    },
-    {
-        "name": "sensitive",
-        "description": "Other sensitive content",
-        "images": [
-            "https://example.com/sensitive1.jpg",
-            "https://example.com/sensitive2.png"
-        ]
-    }
-]
+    "sfw": [
+        {
+            "category": "nature",
+            "information": "Natural landscapes and wildlife",
+            "images": [
+                "https://example.com/nature1.jpg",
+                "https://example.com/nature2.jpg"
+            ]
+        },
+        {
+            "category": "anime",
+            "information": "Anime artwork and characters",
+            "images": [
+                "https://example.com/anime1.png",
+                "https://example.com/anime2.jpg"
+            ]
+        }
+    ],
+    "nsfw": [
+        {
+            "category": "adultContent",
+            "information": "Explicit adult material",
+            "images": [
+                "https://example.com/nsfw1.jpg",
+                "https://example.com/nsfw2.png"
+            ]
+        },
+        {
+            "category": "sensitive",
+            "information": "Other sensitive content",
+            "images": [
+                "https://example.com/sensitive1.jpg",
+                "https://example.com/sensitive2.png"
+            ]
+        }
+    ]
 }

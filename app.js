@@ -74,8 +74,7 @@ function updateCategoriesWithCustomSources() {
     // Group 2: Custom categories
     if (customCats.length > 0) {
         const customGroup = document.createElement('optgroup');
-        customGroup.label = 'Custom Categories';
-        
+        customGroup.label = customSources.sourceInfo[0]?.title || 'Custom Categories'; // Use sourceInfo title
         customCats.forEach(cat => {
             const option = document.createElement('option');
             option.value = 'custom:' + cat;
@@ -350,6 +349,7 @@ async function importCustomSource() {
         }, 250); // Wait for fade-out to complete
 
         // Clear file selection after success message
+        importSourceBtn.disabled = true; // Disable the button just for visuals
         setTimeout(() => {
             clearFileSelection();
         }, 2000); // Ensure it runs after the success message fade-out
@@ -387,7 +387,7 @@ function validateSourceFormat(data) {
 function validateCategory(category) {
     return category && 
            typeof category === 'object' && 
-           typeof category.name === 'string' && 
+           typeof category.category === 'string' && // Changed from 'name' to 'category'
            Array.isArray(category.images) &&
            category.images.every(url => typeof url === 'string');
 }
@@ -397,38 +397,40 @@ function processCustomSources(data) {
     // Reset existing custom sources
     customSources.sfw.clear();
     customSources.nsfw.clear();
-    
+    customSources.sourceInfo = data.sourceInfo || []; // Store sourceInfo
+
     // Process SFW categories
     data.sfw.forEach(category => {
-        if (category.name && Array.isArray(category.images) && category.images.length > 0) {
-            customSources.sfw.set(category.name, {
-                name: category.name,
-                description: category.description || '',
+        if (category.category && Array.isArray(category.images) && category.images.length > 0) {
+            customSources.sfw.set(category.category, {
+                category: category.category,
+                information: category.information || '',
                 images: [...category.images]
             });
         }
     });
-    
+
     // Process NSFW categories
     data.nsfw.forEach(category => {
-        if (category.name && Array.isArray(category.images) && category.images.length > 0) {
-            customSources.nsfw.set(category.name, {
-                name: category.name,
-                description: category.description || '',
+        if (category.category && Array.isArray(category.images) && category.images.length > 0) {
+            customSources.nsfw.set(category.category, {
+                category: category.category,
+                information: category.information || '',
                 images: [...category.images]
             });
         }
     });
-    
-    // Save to localStorage (new addition)
+
+    // Save to localStorage
     localStorage.setItem('customSources', JSON.stringify({
         sfw: Array.from(customSources.sfw.entries()),
-        nsfw: Array.from(customSources.nsfw.entries())
+        nsfw: Array.from(customSources.nsfw.entries()),
+        sourceInfo: customSources.sourceInfo
     }));
-    
+
     // Update the categories dropdown with new options
     updateCategoriesWithCustomSources();
-    checkLocalStorageData()
+    checkLocalStorageData();
 }
 
 // Count total images in source
