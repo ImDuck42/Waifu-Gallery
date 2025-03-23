@@ -303,6 +303,8 @@ const state = {
       window.location.replace(`${state.basePath}/documentation/indexdocs.html`);
     } else if (currentPath.endsWith('/contact') || currentPath.endsWith('/contact/')) {
       window.location.replace(`${state.basePath}/contact/indexcontact.html`);
+    } else if (currentPath.endsWith('/rl') || currentPath.endsWith('/rl/')) {
+      window.location.replace(`https://www.yout-ube.com/watch?v=dQw4w9WgXcQ`);
     }
   }
   
