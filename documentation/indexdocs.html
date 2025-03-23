@@ -375,7 +375,7 @@ for img in multiple_images[:3]:
                 
                 <h4 style="margin: 1rem 0 0.5rem 0;">Template Structure:</h4>
                 <div class="response-example">{
-    "SourceInfo": [
+    "sourceInfo": [
         {
             "title": "Custom Source Template",
             "description": "A template for creating custom sources",
@@ -406,7 +406,7 @@ for img in multiple_images[:3]:
     ],
     "nsfw": [
         {
-            "category": "adultContent",
+            "category": "adult content",
             "information": "Explicit adult material",
             "images": [
                 "https://example.com/nsfw1.jpg",
@@ -434,7 +434,7 @@ for img in multiple_images[:3]:
                         </svg>
                         Important Note
                     </div>
-                    <p>Do not change the "sfw", "nsfw" and "Custom Source Template" keys in the template. You can leave either section empty if you don't have images for that classification (e.g., <code>"sfw": [],</code>), but the keys must remain in the JSON structure.</p>
+                    <p>Do not change the "sfw", "nsfw" and "sourceInfo" keys in the template. You can leave either section empty (NOT sourceInfo) if you don't have images for that classification (e.g., <code>"sfw": [],</code>), but the keys must remain in the JSON structure.</p>
                 </div>
             </div>
             
