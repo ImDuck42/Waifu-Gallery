@@ -30,7 +30,7 @@
     ],
     "nsfw": [
         {
-            "category": "adultContent",
+            "category": "adult Content",
             "information": "Explicit adult material",
             "images": [
                 "https://example.com/nsfw1.jpg",
