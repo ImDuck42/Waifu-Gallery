@@ -51,7 +51,7 @@ function updateCategories() {
 function updateCategoriesWithCustomSources() {
     const isNSFW = nsfwToggle.checked;
     const categories = isNSFW ? nsfwCategories : sfwCategories;
-    const customCats = isNSFW ? Array.from(customSources.nsfw.keys()) : Array.from(customSources.sfw.keys());
+    const customCats = isNSFW ? Array.from(customSources.nsfw.entries()) : Array.from(customSources.sfw.entries());
     
     // Reset dropdown
     categoryDropdown.innerHTML = '<option value="" disabled selected>Select Category</option>';
@@ -75,9 +75,9 @@ function updateCategoriesWithCustomSources() {
     if (customCats.length > 0) {
         const customGroup = document.createElement('optgroup');
         customGroup.label = customSources.sourceInfo[0]?.title || 'Custom Categories'; // Use sourceInfo title
-        customCats.forEach(cat => {
+        customCats.forEach(([cat, data]) => {
             const option = document.createElement('option');
-            option.value = 'custom:' + cat;
+            option.value = `${data.sourceName}:${cat}`; // Include source name in value
             option.textContent = `${cat.charAt(0).toUpperCase()}${cat.slice(1)}`;
             customGroup.appendChild(option);
         });
@@ -104,9 +104,9 @@ function validateAndApplyURLParams() {
     const { type, category } = parseURL();
     const validTypes = ['nsfw', 'sfw'];
     
-    // Extract the base category name if it's a custom category
-    const isCustomCategory = category && category.startsWith('custom:');
-    const baseCategoryName = isCustomCategory ? category.substring(7) : category;
+    // Extract the source name and base category name
+    const isCustomCategory = category && category.includes(':');
+    const [sourceName, baseCategoryName] = isCustomCategory ? category.split(':') : [null, category];
     
     // Determine if the category is valid
     const isValidCategory = isCustomCategory 
@@ -120,7 +120,7 @@ function validateAndApplyURLParams() {
 
     nsfwToggle.checked = type === 'nsfw';
     updateCategoriesWithCustomSources();
-    categoryDropdown.value = isCustomCategory ? `custom:${baseCategoryName}` : baseCategoryName;
+    categoryDropdown.value = isCustomCategory ? `${sourceName}:${baseCategoryName}` : baseCategoryName;
     fetchAndDisplayWaifus();
     return true;
 }
@@ -142,8 +142,8 @@ async function fetchAndDisplayWaifus() {
     }
     
     // Check if this is a custom category
-    if (category.startsWith('custom:')) {
-        const customCatName = category.substring(7); // Remove 'custom:' prefix
+    if (category.includes(':')) {
+        const [sourceName, customCatName] = category.split(':'); // Extract source name and category
         displayCustomWaifus(type, customCatName);
         updateURL(type, category); // Still update the URL
         return;
@@ -404,6 +404,7 @@ function processCustomSources(data) {
         if (category.category && Array.isArray(category.images) && category.images.length > 0) {
             customSources.sfw.set(category.category, {
                 category: category.category,
+                sourceName: data.sourceInfo[0]?.title || 'Unknown Source', // Add source name
                 information: category.information || '',
                 images: [...category.images]
             });
@@ -415,6 +416,7 @@ function processCustomSources(data) {
         if (category.category && Array.isArray(category.images) && category.images.length > 0) {
             customSources.nsfw.set(category.category, {
                 category: category.category,
+                sourceName: data.sourceInfo[0]?.title || 'Unknown Source', // Add source name
                 information: category.information || '',
                 images: [...category.images]
             });
