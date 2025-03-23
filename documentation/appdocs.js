@@ -1,13 +1,13 @@
 function changeTab(event, tabId) {
     // Hide all code examples
-    var codeExamples = document.getElementsByClassName("code-example");
-    for (var i = 0; i < codeExamples.length; i++) {
+    const codeExamples = document.getElementsByClassName("code-example");
+    for (let i = 0; i < codeExamples.length; i++) {
         codeExamples[i].style.display = "none";
     }
 
     // Remove 'active' class from all tabs
-    var tabs = document.getElementsByClassName("tab");
-    for (var i = 0; i < tabs.length; i++) {
+    const tabs = document.getElementsByClassName("tab");
+    for (let i = 0; i < tabs.length; i++) {
         tabs[i].className = tabs[i].className.replace(" active", "");
     }
 

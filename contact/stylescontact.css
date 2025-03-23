@@ -13,12 +13,12 @@
     --code-bg: #121225;
     --code-text: #e2e2fd;
     
-    /* Spacing & Sizes */
+    /* Spacing & Shapes */
     --border-radius-sm: 8px;
     --border-radius: 12px;
     --border-radius-lg: 16px;
     
-    /* Effects */
+    /* Animations */
     --card-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
