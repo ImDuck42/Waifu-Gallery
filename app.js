@@ -23,7 +23,9 @@ const state = {
 // Constants
 const CATEGORIES = {
   nsfw: ['waifu', 'neko', 'trap', 'blowjob'],
-  sfw: ['waifu', 'neko', 'shinobu', 'megumin', 'bully', 'cuddle', 'cry', 'hug', 'awoo', 'kiss', 'lick', 'pat', 'smug', 'bonk', 'yeet', 'blush', 'smile', 'wave', 'highfive', 'handhold', 'nom', 'bite', 'glomp', 'slap', 'kill', 'kick', 'happy', 'wink', 'poke', 'dance', 'cringe']
+  sfw: ['waifu', 'neko', 'shinobu', 'megumin', 'bully', 'cuddle', 'cry', 'hug', 'awoo', 'kiss', 'lick', 'pat', 'smug', 'bonk', 'yeet', 'blush', 'smile', 'wave', 'highfive', 'handhold', 'nom', 'bite', 'glomp', 'slap', 'kill', 'kick', 'happy', 'wink', 'poke', 'dance', 'cringe'],
+  images: ['.jpg', '.jpeg', '.png', '.webp', '.bpm', 'tiff', '.svg', '.heic', 'heif', '.apng', '.gif'],
+  videos: ['.mp4', '.webm', '.mov', '.avi', '.flv', '.mkv', '.wmv', '.m4v', '.mpg', '.mpeg', '.3gp', '.ogv']
 };
 
 // Helper functions
@@ -247,17 +249,23 @@ async function fetchAndDisplayWaifus() {
 
 function displayWaifus(files) {
   state.waifuContainer.innerHTML = files.map(url => {
-    if (url.endsWith('.mp4', '.webm', '.mov')) {
+    if ([CATEGORIES.videos].some(ext => url.endsWith(ext))) {
       return `
         <div class="video-wrapper">
           <video controls>
-            <source src="${url}" type="video" alt="Fetched Video" loading="lazy">
+            <source src="${url}" type="video" alt="Failed to fetch Video">
           </video>
+        </div>`;
+    } 
+    else if ([CATEGORIES.images].some(ext => url.endsWith(ext))) {
+      return `
+        <div class="image-wrapper">
+          <img src="${url}" alt="Failed to fetch image" loading="lazy">
         </div>`;
     } else {
       return `
         <div class="image-wrapper">
-          <img src="${url}" alt="Fetched image" loading="lazy">
+          <img src="${url}" alt="Invalid media format" loading="lazy">
         </div>`;
     }
   }).join('');
