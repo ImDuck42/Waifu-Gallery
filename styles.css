@@ -567,6 +567,28 @@ input:checked + .slider::before {
   opacity: 1;
 }
 
+.video-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--border-radius);
+  background: var(--bg-secondary);
+  box-shadow: var(--card-shadow);
+  transition: var(--transition);
+  aspect-ratio: 16/9;
+}
+
+.video-wrapper:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+.video-wrapper video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--border-radius);
+}
+
 /* Social Links */
 .social-links {
   display: flex;
