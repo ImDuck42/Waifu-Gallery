@@ -1,0 +1,429 @@
+<!-- Just For Fun-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Metadata and external resources -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A modern JSON Structure Visualizer">
+    <meta name="theme-color" content="#8c5eff">
+    <link rel="icon" type="image/png" href="./../assets/kurukuruAPNG.png">
+    <title>JSON Structure Visualizer</title>
+    <style>
+        :root {
+            --bg-color: #0f0f1a;
+            --primary-color: #8c5eff;
+            --secondary-color: #ff67d7;
+            --success-color: #2ecc71;
+            --text-color: #ffffff;
+            --border-color: #262639;
+            --node-bg: #1a1a2e;
+            --leaf-bg: #262639;
+            --error-color: #ff4757;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        .input-section {
+            background-color: var(--node-bg);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        input[type="text"] {
+            flex-grow: 1;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 16px;
+            background-color: var(--leaf-bg);
+            color: var(--text-color);
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(140, 94, 255, 0.2);
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 6px;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        button:disabled {
+            background-color: var(--error-color);
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .visualization-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: var(--node-bg);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            min-height: 300px;
+            display: none;
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            color: var(--error-color);
+            text-align: center;
+            padding: 20px;
+            font-weight: bold;
+        }
+
+        .json-tree {
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        .tree-node {
+            margin-bottom: 10px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .tree-node-header {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: var(--node-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .tree-node-header:hover {
+            background-color: var(--leaf-bg);
+        }
+
+        .tree-node-content {
+            padding-left: 25px;
+            border-left: 2px solid var(--border-color);
+            margin-left: 10px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .tree-node.expanded > .tree-node-content {
+            display: block;
+        }
+
+        .toggle-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .type-indicator {
+            margin-left: 10px;
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+        }
+
+        .key-name {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .value-leaf {
+            background-color: var(--leaf-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .value-type {
+            font-size: 12px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            background-color: #ddd;
+            color: #333;
+            margin-left: 10px;
+        }
+
+        /* Type-specific styling */
+        .type-object { background-color: var(--success-color); }
+        .type-array { background-color: var(--primary-color); }
+        .type-string { background-color: #e17055; }
+        .type-number { background-color: #fdcb6e; color: #333; }
+        .type-boolean { background-color: #a29bfe; }
+        .type-null { background-color: #636e72; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>JSON Structure Visualizer</h1>
+    </header>
+
+    <div class="input-section">
+        <div class="input-container">
+            <input type="text" id="json-url" placeholder="Enter URL to JSON file..." 
+                   value="https://jsonplaceholder.typicode.com/todos/1">
+            <button id="visualize-btn">Visualize</button>
+        </div>
+    </div>
+
+    <div class="visualization-container" id="visualization">
+        <div class="json-tree" id="json-tree"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const jsonUrlInput = document.getElementById('json-url');
+            const visualizeBtn = document.getElementById('visualize-btn');
+            const visualizationContainer = document.getElementById('visualization');
+            const jsonTreeEl = document.getElementById('json-tree');
+            
+            // Add drag-and-drop functionality
+            const inputSection = document.querySelector('.input-section');
+            inputSection.addEventListener('dragover', function(event) {
+                event.preventDefault();
+                inputSection.style.border = '2px dashed var(--primary-color)';
+            });
+
+            inputSection.addEventListener('dragleave', function() {
+                inputSection.style.border = 'none';
+            });
+
+            inputSection.addEventListener('drop', function(event) {
+                event.preventDefault();
+                inputSection.style.border = 'none';
+
+                const file = event.dataTransfer.files[0];
+                if (file && file.type === 'application/json') {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const jsonData = JSON.parse(e.target.result);
+                            jsonUrlInput.value = 'Dropped JSON File';
+                            visualizeBtn.disabled = true; // Disable the button
+                            visualizationContainer.style.display = 'block';
+                            jsonTreeEl.innerHTML = '';
+                            renderJSONTree(jsonData, jsonTreeEl);
+                        } catch (error) {
+                            jsonTreeEl.innerHTML = `<div class="error-message">Error parsing JSON file: ${error.message}</div>`;
+                            console.error('Error:', error);
+                        }
+                    };
+                    reader.readAsText(file);
+                } else {
+                    jsonTreeEl.innerHTML = `<div class="error-message">Please drop a valid JSON file.</div>`;
+                }
+            });
+
+            // Main visualization function
+            visualizeBtn.addEventListener('click', async function() {
+                const url = jsonUrlInput.value.trim();
+                                
+                // Show visualization container and loading spinner
+                visualizationContainer.style.display = 'block';
+                jsonTreeEl.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+                
+                try {
+                    // Fetch JSON data from URL
+                    const response = await fetch(url);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    // Render the JSON tree
+                    jsonTreeEl.innerHTML = '';
+                    renderJSONTree(data, jsonTreeEl);
+                    
+                } catch (error) {
+                    jsonTreeEl.innerHTML = `<div class="error-message">Error fetching or parsing JSON: ${error.message}</div>`;
+                    console.error('Error:', error);
+                }
+            });
+            
+            // Render JSON tree
+            function renderJSONTree(data, container, keyName = null) {
+                const nodeEl = document.createElement('div');
+                nodeEl.className = 'tree-node';
+                
+                const headerEl = document.createElement('div');
+                headerEl.className = 'tree-node-header';
+                
+                const contentEl = document.createElement('div');
+                contentEl.className = 'tree-node-content';
+                
+                // Setup toggle behavior
+                headerEl.addEventListener('click', function() {
+                    nodeEl.classList.toggle('expanded');
+                    toggleIcon.textContent = nodeEl.classList.contains('expanded') ? '−' : '+';
+                });
+                
+                // Create toggle icon
+                const toggleIcon = document.createElement('span');
+                toggleIcon.className = 'toggle-icon';
+                
+                let dataType = getType(data);
+                
+                // Different rendering based on data type
+                if (dataType === 'object' && data !== null) {
+                    toggleIcon.textContent = '+';
+                    headerEl.appendChild(toggleIcon);
+                    
+                    if (keyName !== null) {
+                        const keyEl = document.createElement('span');
+                        keyEl.className = 'key-name';
+                        keyEl.textContent = keyName;
+                        headerEl.appendChild(keyEl);
+                    }
+                    
+                    const isArray = Array.isArray(data);
+                    const typeIndicator = document.createElement('span');
+                    typeIndicator.className = 'type-indicator ' + (isArray ? 'type-array' : 'type-object');
+                    typeIndicator.textContent = isArray ? 'Array' : 'Object';
+                    headerEl.appendChild(typeIndicator);
+                    
+                    // Create child nodes
+                    for (const [key, value] of Object.entries(data)) {
+                        renderJSONTree(value, contentEl, key);
+                    }
+                } else {
+                    // For primitive values
+                    toggleIcon.textContent = '•';
+                    headerEl.appendChild(toggleIcon);
+                    
+                    const keyEl = document.createElement('span');
+                    keyEl.className = 'key-name';
+                    keyEl.textContent = keyName;
+                    headerEl.appendChild(keyEl);
+                    
+                    const valueEl = document.createElement('div');
+                    valueEl.className = 'value-leaf';
+                    
+                    // Format value based on type
+                    let valueText = formatValue(data);
+                    valueEl.textContent = valueText;
+                    
+                    const valueTypeEl = document.createElement('span');
+                    valueTypeEl.className = 'value-type type-' + dataType;
+                    valueTypeEl.textContent = capitalizeFirstLetter(dataType);
+                    valueEl.appendChild(valueTypeEl);
+                    
+                    contentEl.appendChild(valueEl);
+                }
+                
+                nodeEl.appendChild(headerEl);
+                nodeEl.appendChild(contentEl);
+                container.appendChild(nodeEl);
+            }
+            
+            // Helper functions
+            function getType(value) {
+                if (value === null) return 'null';
+                if (Array.isArray(value)) return 'object'; // We consider arrays as objects for visualization
+                return typeof value;
+            }
+            
+            function formatValue(value) {
+                if (value === null) return 'null';
+                if (typeof value === 'string') return `"${value}"`;
+                return String(value);
+            }
+            
+            function capitalizeFirstLetter(string) {
+                return string.charAt(0).toUpperCase() + string.slice(1);
+            }
+            
+            // Trigger visualization on Enter key in input field
+            jsonUrlInput.addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    visualizeBtn.click();
+                }
+            });
+            
+            // Auto-visualize the default URL
+            visualizeBtn.click();
+        });
+    </script>
+</body>
+</html>

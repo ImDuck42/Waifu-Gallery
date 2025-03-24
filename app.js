@@ -303,6 +303,8 @@ function handleRedirects() {
     window.location.replace(`${state.basePath}/documentation/indexdocs.html`);
   } else if (currentPath.endsWith('/contact') || currentPath.endsWith('/contact/')) {
     window.location.replace(`${state.basePath}/contact/indexcontact.html`);
+  } else if (currentPath.endsWith('/json') || currentPath.endsWith('/json/')) {
+    window.location.replace(`${state.basePath}/stuff/json.html`); 
   } else if (currentPath.endsWith('/rawr') || currentPath.endsWith('/rawr/')) {
     window.location.replace(`https://www.yout-ube.com/watch?v=dQw4w9WgXcQ`);
   }
@@ -401,6 +403,9 @@ function clearLocalStorage() {
     updateCategoriesWithCustomSources();
     showImportSuccess("Local storage cleared successfully!");
     
+    // Clear URL bar
+    window.history.replaceState({}, '', state.basePath || '/');
+
     if (state.categoryDropdown.value.startsWith('')) {
       state.categoryDropdown.value = '';
       state.waifuContainer.innerHTML = `
