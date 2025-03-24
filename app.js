@@ -37,7 +37,7 @@ function initializeApplication() {
   state.nsfwToggle = getElement('nsfwToggle');
   state.categoryDropdown = getElement('categoryDropdown');
   state.waifuContainer = getElement('waifu-container');
-  
+
   // Set base path for GitHub Pages or other hosting environments
   const pathParts = window.location.pathname.split('/');
   state.basePath = pathParts[1] ? `/${pathParts[1]}` : '';
@@ -284,7 +284,7 @@ function handleError(error) {
       <div class="error-icon">
         <img src="./assets/smthnwrong.png" alt="Something went wrong">
       </div>
-      <p class="error-text">Failed to generate waifus<br><small>${error.message || 'Unknown error'}</small></p>
+      <p class="error-text">Failed to fetch images<br><small>${error.message || 'Unknown error'}</small></p>
       <button class="retry-btn" onclick="fetchAndDisplayWaifus()">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M23 4v6h-6M1 20v-6h6"/>
@@ -326,6 +326,31 @@ function setupCustomSourceImport() {
   state.jsonFileInput.addEventListener('change', handleFileSelection);
   state.importSourceBtn.addEventListener('click', importCustomSource);
   state.clearFileBtn.addEventListener('click', clearFileSelection);
+
+  // Drag-and-drop file upload logic
+  const fileUploadContainer = getElement('fileUploadContainer');
+  const jsonFileInput = getElement('jsonFileInput');
+
+  if (fileUploadContainer && jsonFileInput) {
+    fileUploadContainer.addEventListener('dragover', (event) => {
+      event.preventDefault();
+      fileUploadContainer.classList.add('drag-over');
+    });
+
+    fileUploadContainer.addEventListener('dragleave', () => {
+      fileUploadContainer.classList.remove('drag-over');
+    });
+
+    fileUploadContainer.addEventListener('drop', (event) => {
+      event.preventDefault();
+      fileUploadContainer.classList.remove('drag-over');
+      const files = event.dataTransfer.files;
+      jsonFileInput.files = files;
+      getElement('selectedFileName').textContent = files[0].name;
+      getElement('fileNameDisplay').style.display = 'block';
+      getElement('importSourceBtn').disabled = false;
+    });
+  }
 }
 
 function checkLocalStorageData() {
@@ -591,30 +616,4 @@ function randomizeImages() {
 checkLocalStorageData();
 
 // Run initialization when DOM is loaded
-document.addEventListener('DOMContentLoaded', initializeApplication)
-
-
-
-
-// Still need to correctly implement
-const fileUploadContainer = document.getElementById('fileUploadContainer');
-const jsonFileInput = document.getElementById('jsonFileInput');
-
-fileUploadContainer.addEventListener('dragover', (event) => {
-    event.preventDefault();
-    fileUploadContainer.classList.add('drag-over');
-});
-
-fileUploadContainer.addEventListener('dragleave', () => {
-    fileUploadContainer.classList.remove('drag-over');
-});
-
-fileUploadContainer.addEventListener('drop', (event) => {
-    event.preventDefault();
-    fileUploadContainer.classList.remove('drag-over');
-    const files = event.dataTransfer.files;
-    jsonFileInput.files = files;
-    document.getElementById('selectedFileName').textContent = files[0].name;
-    document.getElementById('fileNameDisplay').style.display = 'block';
-    document.getElementById('importSourceBtn').disabled = false;
-});
+document.addEventListener('DOMContentLoaded', initializeApplication);
