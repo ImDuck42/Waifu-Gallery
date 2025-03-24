@@ -574,11 +574,11 @@ input:checked + .slider::before {
   background: var(--bg-secondary);
   box-shadow: var(--card-shadow);
   transition: var(--transition);
-  aspect-ratio: 16/9;
+  aspect-ratio: auto;
 }
 
 .video-wrapper:hover {
-  transform: translateY(-5px);
+  transform: translateY(-2px);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
 }
 

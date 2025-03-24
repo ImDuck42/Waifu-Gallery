@@ -247,12 +247,11 @@ async function fetchAndDisplayWaifus() {
 
 function displayWaifus(files) {
   state.waifuContainer.innerHTML = files.map(url => {
-    if (url.endsWith('.mp4')) {
+    if (url.endsWith('.mp4', '.webm', '.mov')) {
       return `
         <div class="video-wrapper">
           <video controls>
-            <source src="${url}" type="video/mp4">
-            Your browser does not support the video tag.
+            <source src="${url}" type="video" alt="Fetched Video" loading="lazy">
           </video>
         </div>`;
     } else {
@@ -617,7 +616,7 @@ function showImportError(message) {
 
 // Image randomization function
 function randomizeImages() {
-  const images = Array.from(state.waifuContainer.querySelectorAll('.image-wrapper'));
+  const images = Array.from(state.waifuContainer.querySelectorAll('.image-wrapper' || '.video-wrapper'));
   if (images.length === 0) return;
 
   // Shuffle images
