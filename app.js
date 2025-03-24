@@ -160,38 +160,14 @@ function updateURL(type, category) {
 
 function parseURL() {
   const pathSegments = window.location.pathname.split('/').slice(2);
-  let type = '', category = '', sourceUrl = '';
-  
-  // Check for source: parameter
-  for (let i = 0; i < pathSegments.length; i++) {
-    const segment = decodeURIComponent(pathSegments[i] || '');
-    if (segment.startsWith('source:')) {
-      sourceUrl = segment.substring(7); // Remove 'source:' prefix
-    } else if (!type) {
-      type = segment;
-    } else if (!category) {
-      category = segment;
-    }
-  }
-  
-  return { type, category, sourceUrl };
+  return {
+    type: decodeURIComponent(pathSegments[0] || ''),
+    category: decodeURIComponent(pathSegments[1] || '')
+  };
 }
 
 function validateAndApplyURLParams() {
-  const { type, category, sourceUrl } = parseURL();
-  
-  // If a source URL is provided, process it first
-  if (sourceUrl) {
-    fetchAndProcessSourceFromURL(sourceUrl).then(success => {
-      if (success && type && category) {
-        // The rest of the processing will happen in the fetchAndProcessSourceFromURL function
-        // after the source is loaded
-      }
-    });
-    return true;
-  }
-  
-  // Original validation logic for type and category
+  const { type, category } = parseURL();
   const validTypes = ['nsfw', 'sfw'];
   
   // Handle custom categories in URL
@@ -220,67 +196,6 @@ function validateAndApplyURLParams() {
   state.categoryDropdown.value = isCustomCategory ? `${sourceName}:${decodedBaseCategoryName}` : decodedBaseCategoryName;
   fetchAndDisplayWaifus();
   return true;
-}
-
-// New function to fetch and process source from URL
-async function fetchAndProcessSourceFromURL(sourceUrl) {
-  try {
-    showLoadingSkeleton(9);
-    state.waifuContainer.innerHTML = `
-      <div class="error-container">
-        <div class="error-icon">
-          <img src="./assets/kurukuruAPNG.png" alt="Loading">
-        </div>
-        <p class="error-text">Loading custom source from URL...<br><small>${decodeURIComponent(sourceUrl)}</small></p>
-      </div>`;
-    
-    // Decode the URL (it may contain encoded characters)
-    const decodedUrl = decodeURIComponent(sourceUrl);
-    
-    // Add https:// if not present
-    const fullUrl = decodedUrl.startsWith('http') ? decodedUrl : `https://${decodedUrl}`;
-    
-    const response = await fetch(fullUrl);
-    if (!response.ok) throw new Error(`Failed to fetch source: ${response.status}`);
-    
-    const sourceData = await response.json();
-    
-    // Validate and process the source
-    if (!validateSourceFormat(sourceData)) {
-      throw new Error("Invalid source format from URL");
-    }
-    
-    // Process and store the source data
-    processCustomSources(sourceData);
-    
-    // Show success message
-    state.waifuContainer.innerHTML = `
-      <div class="error-container">
-        <div class="error-icon">
-          <img src="./assets/kurukuruAPNG.png" alt="Success">
-        </div>
-        <p class="error-text">Successfully imported source!<br>
-        <small>${countTotalImages(sourceData)} images in ${countCategories(sourceData)} categories</small></p>
-      </div>`;
-    
-    // Update UI after importing
-    setTimeout(() => {
-      updateCategoriesWithCustomSources();
-      // If type and category were also specified, load those images
-      const { type, category } = parseURL();
-      if (type && category) {
-        state.nsfwToggle.checked = type === 'nsfw';
-        updateCategoriesWithCustomSources();
-        state.categoryDropdown.value = category;
-        fetchAndDisplayWaifus();
-      }
-    }, 1500);
-    
-    return true;
-  } catch (error) {
-    handleError(new Error(`Failed to import source: ${error.message}`));
-    return false;
-  }
 }
 
 // Image handling functions
