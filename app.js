@@ -181,7 +181,24 @@ async function validateAndApplyURLParams() {
     try {
       const response = await fetch(sourceUrl);
       if (!response.ok) throw new Error(`Failed to fetch source: ${response.status}`);
-      const sourceData = await response.json();
+      
+      const contentType = response.headers.get('Content-Type');
+      let sourceData;
+
+      if (contentType && contentType.includes('application/json')) {
+        // If the response is JSON, parse it directly
+        sourceData = await response.json();
+      } else {
+        // If the response is HTML, parse and extract JSON from <pre> tag
+        const text = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(text, 'text/html');
+        const preTag = doc.querySelector('pre');
+        if (!preTag || !preTag.textContent) {
+          throw new Error('Failed to extract JSON from the response.');
+        }
+        sourceData = JSON.parse(preTag.textContent);
+      }
 
       if (!validateSourceFormat(sourceData)) {
         throw new Error("Invalid source format. Please use the correct template.");
