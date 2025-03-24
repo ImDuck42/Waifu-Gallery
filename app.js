@@ -249,7 +249,7 @@ async function fetchAndDisplayWaifus() {
 
 function displayWaifus(files) {
   state.waifuContainer.innerHTML = files.map(url => {
-    if ([CATEGORIES.videos].some(ext => url.endsWith(ext))) {
+    if (CATEGORIES.videos.some(ext => url.endsWith(ext))) {
       return `
         <div class="video-wrapper">
           <video controls>
@@ -257,7 +257,7 @@ function displayWaifus(files) {
           </video>
         </div>`;
     } 
-    else if ([CATEGORIES.images].some(ext => url.endsWith(ext))) {
+    else if (CATEGORIES.images.some(ext => url.endsWith(ext))) {
       return `
         <div class="image-wrapper">
           <img src="${url}" alt="Failed to fetch image" loading="lazy">
