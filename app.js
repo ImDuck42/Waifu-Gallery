@@ -246,18 +246,29 @@ async function fetchAndDisplayWaifus() {
 }
 
 function displayWaifus(files) {
-  state.waifuContainer.innerHTML = files.map(url => `
-    <div class="image-wrapper">
-      <img src="${url}" alt="Fetched image" loading="lazy">
-    </div>
-  `).join('');
+  state.waifuContainer.innerHTML = files.map(url => {
+    if (url.endsWith('.mp4')) {
+      return `
+        <div class="video-wrapper">
+          <video controls>
+            <source src="${url}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>`;
+    } else {
+      return `
+        <div class="image-wrapper">
+          <img src="${url}" alt="Fetched image" loading="lazy">
+        </div>`;
+    }
+  }).join('');
 }
 
 function displayCustomWaifus(type, categoryName) {
   const categoryData = state.customSources[type].get(categoryName);
   
   if (!categoryData || !categoryData.images || categoryData.images.length === 0) {
-    handleError(new Error(`No images found in custom category: ${categoryName}`));
+    handleError(new Error(`No media found in custom category: ${categoryName}`));
     return;
   }
   

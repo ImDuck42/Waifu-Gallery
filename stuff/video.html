@@ -56,7 +56,7 @@
         <h1>Video Player</h1>
         <input type="text" id="videoUrl" placeholder="Enter video URL here">
         <button onclick="playVideo()">Play Video</button>
-        <video id="videoPlayer" controls onerror="handleVideoError()">
+        <video id="videoPlayer" controls>
             Your browser does not support the video tag.
         </video>
     </div>
@@ -68,16 +68,7 @@
             if (videoUrl) {
                 videoPlayer.src = videoUrl;
                 videoPlayer.load();
-                videoPlayer.play().catch(() => {
-                    alert('Failed to play the video. Please check the URL or try a different video.');
-                });
-            } else {
-                alert('Please enter a valid video URL.');
             }
-        }
-
-        function handleVideoError() {
-            alert('An error occurred while loading the video. Please check the URL or try a different video.');
         }
     </script>
 </body>
