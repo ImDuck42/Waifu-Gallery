@@ -248,7 +248,7 @@ async function fetchAndDisplayWaifus() {
 function displayWaifus(files) {
   state.waifuContainer.innerHTML = files.map(url => `
     <div class="image-wrapper">
-      <img src="${url}" alt="Generated waifu" loading="lazy">
+      <img src="${url}" alt="Fetched image" loading="lazy">
     </div>
   `).join('');
 }

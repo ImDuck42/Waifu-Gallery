@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        video {
+            margin-top: 20px;
+            width: 100%;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Video Player</h1>
+        <input type="text" id="videoUrl" placeholder="Enter video URL here">
+        <button onclick="playVideo()">Play Video</button>
+        <video id="videoPlayer" controls onerror="handleVideoError()">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <script>
+        function playVideo() {
+            const videoUrl = document.getElementById('videoUrl').value;
+            const videoPlayer = document.getElementById('videoPlayer');
+            if (videoUrl) {
+                videoPlayer.src = videoUrl;
+                videoPlayer.load();
+                videoPlayer.play().catch(() => {
+                    alert('Failed to play the video. Please check the URL or try a different video.');
+                });
+            } else {
+                alert('Please enter a valid video URL.');
+            }
+        }
+
+        function handleVideoError() {
+            alert('An error occurred while loading the video. Please check the URL or try a different video.');
+        }
+    </script>
+</body>
+</html>
