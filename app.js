@@ -166,55 +166,17 @@ function parseURL() {
   };
 }
 
-async function validateAndApplyURLParams() {
+function validateAndApplyURLParams() {
   const { type, category } = parseURL();
   const validTypes = ['nsfw', 'sfw'];
-
+  
   // Handle custom categories in URL
   const isCustomCategory = category && category.includes(':');
   const [sourceName, baseCategoryName] = isCustomCategory ? category.split(':') : [null, category];
-
-  // Check for source URL parameter
-  const sourceMatch = window.location.pathname.match(/\/source:([^/]+)\//);
-  if (sourceMatch) {
-    const sourceUrl = decodeURIComponent(sourceMatch[1]);
-    try {
-      const response = await fetch(sourceUrl);
-      if (!response.ok) throw new Error(`Failed to fetch source: ${response.status}`);
-      
-      const contentType = response.headers.get('Content-Type');
-      let sourceData;
-
-      if (contentType && contentType.includes('application/json')) {
-        // If the response is JSON, parse it directly
-        sourceData = await response.json();
-      } else {
-        // If the response is HTML, parse and extract JSON from <pre> tag
-        const text = await response.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(text, 'text/html');
-        const preTag = doc.querySelector('pre');
-        if (!preTag || !preTag.textContent) {
-          throw new Error('Failed to extract JSON from the response.');
-        }
-        sourceData = JSON.parse(preTag.textContent);
-      }
-
-      if (!validateSourceFormat(sourceData)) {
-        throw new Error("Invalid source format. Please use the correct template.");
-      }
-
-      processCustomSources(sourceData);
-      showImportSuccess(`Successfully imported ${countTotalImages(sourceData)} images from URL.`);
-    } catch (error) {
-      showImportError(`Error importing source from URL: ${error.message}`);
-    }
-    return false; // Prevent further URL validation
-  }
-
+  
   // Decode category names to handle spaces
   const decodedBaseCategoryName = decodeURIComponent(baseCategoryName || '');
-
+  
   // Determine if the category is valid
   const isValidCategory = isCustomCategory 
     ? (type === 'nsfw' 
@@ -223,7 +185,7 @@ async function validateAndApplyURLParams() {
     : (type === 'nsfw' 
         ? CATEGORIES.nsfw.includes(decodedBaseCategoryName) 
         : CATEGORIES.sfw.includes(decodedBaseCategoryName));
-
+  
   if (!validTypes.includes(type) || !isValidCategory) {
     window.history.replaceState({}, '', state.basePath || '/');
     return false;
