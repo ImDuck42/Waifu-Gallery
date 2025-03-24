@@ -253,14 +253,14 @@ function displayWaifus(files) {
       return `
         <div class="video-wrapper">
           <video controls>
-            <source src="${url}" type="video" alt="Failed to fetch Video">
+            <source src="${url}" type="video/mp4" alt="Failed to fetch Video">
           </video>
         </div>`;
     } 
     else if (CATEGORIES.images.some(ext => url.endsWith(ext))) {
       return `
         <div class="image-wrapper">
-          <img src="${url}" alt="Failed to fetch image" loading="lazy">
+          <img src="${url}" type="image/png" alt="Failed to fetch image" loading="lazy">
         </div>`;
     } else {
       return `
