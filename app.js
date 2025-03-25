@@ -640,3 +640,31 @@ checkLocalStorageData();
 
 // Run initialization when DOM is loaded
 document.addEventListener('DOMContentLoaded', initializeApplication);
+
+// Image modal setup
+function setupImageModal() {
+  const modal = getElement('imageModal');
+  const modalImage = getElement('modalImage');
+
+  state.waifuContainer.addEventListener('click', (event) => {
+    const target = event.target;
+    if (target.tagName === 'IMG') {
+      modalImage.src = target.src;
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden'; // Disable scrolling
+    }
+  });
+
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) {
+      modal.classList.remove('active');
+      document.body.style.overflow = ''; // Re-enable scrolling
+    }
+  });
+}
+
+// Call setupImageModal during initialization
+document.addEventListener('DOMContentLoaded', () => {
+  initializeApplication();
+  setupImageModal();
+});
