@@ -252,7 +252,7 @@ function displayWaifus(files) {
     if (CATEGORIES.videos.some(ext => url.includes(ext))) {
       return `
         <div class="video-wrapper">
-          <video controls>
+          <video controls autoplay muted>
             <source src="${url}" type="video/mp4" alt="Failed to fetch Video">
           </video>
         </div>`;
