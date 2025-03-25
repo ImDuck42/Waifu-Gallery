@@ -648,8 +648,15 @@ function setupImageModal() {
 
   state.waifuContainer.addEventListener('click', (event) => {
     const target = event.target;
-    if (target.tagName === 'IMG') {
+
+    if (target.tagName === 'IMG' && target.complete) {
+      // Ensure the image is fully loaded before displaying it
       modalImage.src = target.src;
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden'; // Disable scrolling
+    } else if (target.tagName === 'VIDEO' && target.readyState >= 3) {
+      // Ensure the video is ready to play before displaying it
+      modalImage.src = target.currentSrc;
       modal.classList.add('active');
       document.body.style.overflow = 'hidden'; // Disable scrolling
     }

@@ -15,3 +15,34 @@ function changeTab(event, tabId) {
     document.getElementById(tabId).style.display = "block";
     event.currentTarget.className += " active";
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    const sections = document.querySelectorAll(".docs-section");
+    const navLinks = document.querySelectorAll(".quick-nav-link");
+
+    window.addEventListener("scroll", () => {
+        let current = "None"; // Default to None
+        sections.forEach((section) => {
+            const sectionTop = section.offsetTop - 100;
+            const sectionHeight = section.offsetHeight;
+            if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+                current = section.getAttribute("id");
+            }
+        });
+
+        // Update active navigation link
+        navLinks.forEach((link) => {
+            link.classList.remove("active");
+            if (link.getAttribute("href").includes(current)) {
+                link.classList.add("active");
+            }
+        });
+
+        // Update the URL hash or clear it if no section is active
+        if (current !== "None") {
+            history.pushState(null, null, `#${current}`);
+        } else {
+            history.pushState(null, null, ' '); // Clear the hash
+        }
+    });
+});

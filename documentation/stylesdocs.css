@@ -340,7 +340,7 @@
   
   .tab:last-child {
     border-top-right-radius: var(--border-radius-sm);
-    border-bottom-right-radius: var(--border-radius-sm);
+    border-bottom-right-radius: var (--border-radius-sm);
   }
   
   .tab.active {
@@ -426,5 +426,42 @@
       flex-direction: column;
       gap: 1.5rem;
       text-align: center;
+    }
+  }
+
+  .quick-nav {
+    display: none;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .quick-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    transition: var(--transition);
+  }
+
+  .quick-nav-link:hover,
+  .quick-nav-link.active {
+    color: var(--accent-primary);
+  }
+
+  .quick-nav-link svg {
+    flex-shrink: 0;
+    color: var(--text-secondary);
+    transition: var(--transition);
+  }
+
+  .quick-nav-link:hover svg,
+  .quick-nav-link.active svg {
+    color: var(--accent-primary);
+  }
+
+  @media (min-width: 1024px) {
+    .quick-nav {
+        display: flex;
     }
   }
