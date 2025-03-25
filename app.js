@@ -249,7 +249,7 @@ async function fetchAndDisplayWaifus() {
 
 function displayWaifus(files) {
   state.waifuContainer.innerHTML = files.map(url => {
-    if (CATEGORIES.videos.some(ext => url.endsWith(ext))) {
+    if (CATEGORIES.videos.some(ext => url.includes(ext))) {
       return `
         <div class="video-wrapper">
           <video controls>
@@ -257,14 +257,14 @@ function displayWaifus(files) {
           </video>
         </div>`;
     } 
-    else if (CATEGORIES.images.some(ext => url.endsWith(ext))) {
+    else if (CATEGORIES.images.some(ext => url.includes(ext))) {
       return `
         <div class="image-wrapper">
           <img src="${url}" type="image/png" alt="Failed to fetch image" loading="lazy">
         </div>`;
     } else {
       return `
-        <div class="image-wrapper">
+        <div class="image-wrapper" type="application/octet-stream">
           <img src="${url}" alt="Invalid media format" loading="lazy">
         </div>`;
     }
@@ -624,7 +624,7 @@ function showImportError(message) {
 
 // Image randomization function
 function randomizeImages() {
-  const images = Array.from(state.waifuContainer.querySelectorAll('.image-wrapper' || '.video-wrapper'));
+  const images = Array.from(state.waifuContainer.querySelectorAll('.image-wrapper, .video-wrapper'));
   if (images.length === 0) return;
 
   // Shuffle images
