@@ -666,14 +666,18 @@ function setupImageModal() {
 
     if (clickX < modalRect.left + modalRect.width * 0.3 && currentIndex > 0) {
       // Tap on the left side of the image for previous
-      currentIndex--;
-      applyImageChangeAnimation(mediaElements[currentIndex].src);
-      scrollToMedia(currentIndex);
+      if (mediaElements[currentIndex - 1].complete) {
+        currentIndex--;
+        applyImageChangeAnimation(mediaElements[currentIndex].src);
+        scrollToMedia(currentIndex);
+      }
     } else if (clickX > modalRect.left + modalRect.width * 0.7 && currentIndex < mediaElements.length - 1) {
       // Tap on the right side of the image for next
-      currentIndex++;
-      applyImageChangeAnimation(mediaElements[currentIndex].src);
-      scrollToMedia(currentIndex);
+      if (mediaElements[currentIndex + 1].complete) {
+        currentIndex++;
+        applyImageChangeAnimation(mediaElements[currentIndex].src);
+        scrollToMedia(currentIndex);
+      }
     }
   });
 
