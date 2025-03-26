@@ -659,82 +659,52 @@ function setupImageModal() {
     }
   });
 
+  modalImage.addEventListener('click', (event) => {
+    const mediaElements = Array.from(state.waifuContainer.querySelectorAll('.image-wrapper img'));
+    const modalRect = modalImage.getBoundingClientRect();
+    const clickX = event.clientX;
+
+    if (clickX < modalRect.left + modalRect.width * 0.3 && currentIndex > 0) {
+      // Tap on the left side of the image for previous
+      currentIndex--;
+      applyImageChangeAnimation(mediaElements[currentIndex].src);
+      scrollToMedia(currentIndex);
+    } else if (clickX > modalRect.left + modalRect.width * 0.7 && currentIndex < mediaElements.length - 1) {
+      // Tap on the right side of the image for next
+      currentIndex++;
+      applyImageChangeAnimation(mediaElements[currentIndex].src);
+      scrollToMedia(currentIndex);
+    }
+  });
+
   modal.addEventListener('click', (event) => {
     if (event.target === modal) {
+      // Close modal if clicked outside the image
       modal.classList.remove('active');
       document.body.style.overflow = ''; // Re-enable scrolling
-      scrollToMedia(currentIndex);
+      scrollToMedia(currentIndex); // Scroll to the current image in the background
     }
   });
 
-  // Swipe functionality
-  let startX = 0;
-  modal.addEventListener('touchstart', (event) => {
-    startX = event.touches[0].clientX;
-  });
+  // Remove swipe and arrow key navigation
+}
 
-  modal.addEventListener('touchend', (event) => {
-    const endX = event.changedTouches[0].clientX;
-    const diffX = endX - startX;
-    const mediaElements = Array.from(state.waifuContainer.querySelectorAll('.image-wrapper img'));
+// Function to apply fade-in animation when changing images
+function applyImageChangeAnimation(newSrc) {
+  modalImage.style.opacity = '0'; // Start fade-out
+  setTimeout(() => {
+    modalImage.src = newSrc; // Change the image source
+    modalImage.style.transition = 'opacity 0.3s'; // Apply fade-in transition
+    modalImage.style.opacity = '1'; // Start fade-in
+  }, 150); // Wait for fade-out to complete
+}
 
-    if (Math.abs(diffX) > 50) {
-      if (diffX > 0 && currentIndex > 0) {
-        currentIndex--; // Swipe right for previous
-      } else if (diffX < 0 && currentIndex < mediaElements.length - 1) {
-        currentIndex++; // Swipe left for next
-      }
-
-      const nextMedia = mediaElements[currentIndex];
-      modalImage.src = nextMedia.src;
-
-      // Add sliding animation
-      modalImage.style.transition = 'transform 0.3s ease';
-      modalImage.style.transform = `translateX(${diffX > 0 ? '100%' : '-100%'})`;
-      setTimeout(() => {
-        modalImage.style.transition = '';
-        modalImage.style.transform = 'translateX(0)';
-      }, 300);
-
-      scrollToMedia(currentIndex);
-    }
-  });
-
-  // Arrow key navigation for PC users
-  document.addEventListener('keydown', (event) => {
-    if (!modal.classList.contains('active')) return;
-
-    const mediaElements = Array.from(state.waifuContainer.querySelectorAll('.image-wrapper img'));
-    if (event.key === 'd' && currentIndex < mediaElements.length - 1) {
-      currentIndex++; // Navigate to the next media
-      updateModalMedia(mediaElements, currentIndex, -100);
-    } else if (event.key === 'a' && currentIndex > 0) {
-      currentIndex--; // Navigate to the previous media
-      updateModalMedia(mediaElements, currentIndex, 100);
-    }
-  });
-
-  function updateModalMedia(mediaElements, index, diffX) {
-    const nextMedia = mediaElements[index];
-    modalImage.src = nextMedia.src;
-
-    // Add sliding animation
-    modalImage.style.transition = 'transform 0.3s ease';
-    modalImage.style.transform = `translateX(${diffX > 0 ? '100%' : '-100%'})`;
-    setTimeout(() => {
-      modalImage.style.transition = '';
-      modalImage.style.transform = 'translateX(0)';
-    }, 300);
-
-    scrollToMedia(index); // Scroll the background gallery to the current media
-  }
-
-  function scrollToMedia(index) {
-    const mediaElements = Array.from(state.waifuContainer.querySelectorAll('.image-wrapper'));
-    const targetMedia = mediaElements[index];
-    if (targetMedia) {
-      targetMedia.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
-    }
+// Function to scroll the background gallery to the current image
+function scrollToMedia(index) {
+  const mediaElements = Array.from(state.waifuContainer.querySelectorAll('.image-wrapper'));
+  const targetMedia = mediaElements[index];
+  if (targetMedia) {
+    targetMedia.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
   }
 }
 
