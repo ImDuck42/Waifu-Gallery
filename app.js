@@ -645,18 +645,15 @@ document.addEventListener('DOMContentLoaded', initializeApplication);
 function setupImageModal() {
   const modal = getElement('imageModal');
   const modalImage = getElement('modalImage');
+  let currentIndex = 0;
 
   state.waifuContainer.addEventListener('click', (event) => {
     const target = event.target;
+    const mediaElements = Array.from(state.waifuContainer.querySelectorAll('.image-wrapper img'));
 
     if (target.tagName === 'IMG' && target.complete) {
-      // Ensure the image is fully loaded before displaying it
+      currentIndex = mediaElements.indexOf(target);
       modalImage.src = target.src;
-      modal.classList.add('active');
-      document.body.style.overflow = 'hidden'; // Disable scrolling
-    } else if (target.tagName === 'VIDEO' && target.readyState >= 3) {
-      // Ensure the video is ready to play before displaying it
-      modalImage.src = target.currentSrc;
       modal.classList.add('active');
       document.body.style.overflow = 'hidden'; // Disable scrolling
     }
@@ -666,8 +663,79 @@ function setupImageModal() {
     if (event.target === modal) {
       modal.classList.remove('active');
       document.body.style.overflow = ''; // Re-enable scrolling
+      scrollToMedia(currentIndex);
     }
   });
+
+  // Swipe functionality
+  let startX = 0;
+  modal.addEventListener('touchstart', (event) => {
+    startX = event.touches[0].clientX;
+  });
+
+  modal.addEventListener('touchend', (event) => {
+    const endX = event.changedTouches[0].clientX;
+    const diffX = endX - startX;
+    const mediaElements = Array.from(state.waifuContainer.querySelectorAll('.image-wrapper img'));
+
+    if (Math.abs(diffX) > 50) {
+      if (diffX > 0 && currentIndex > 0) {
+        currentIndex--; // Swipe right for previous
+      } else if (diffX < 0 && currentIndex < mediaElements.length - 1) {
+        currentIndex++; // Swipe left for next
+      }
+
+      const nextMedia = mediaElements[currentIndex];
+      modalImage.src = nextMedia.src;
+
+      // Add sliding animation
+      modalImage.style.transition = 'transform 0.3s ease';
+      modalImage.style.transform = `translateX(${diffX > 0 ? '100%' : '-100%'})`;
+      setTimeout(() => {
+        modalImage.style.transition = '';
+        modalImage.style.transform = 'translateX(0)';
+      }, 300);
+
+      scrollToMedia(currentIndex);
+    }
+  });
+
+  // Arrow key navigation for PC users
+  document.addEventListener('keydown', (event) => {
+    if (!modal.classList.contains('active')) return;
+
+    const mediaElements = Array.from(state.waifuContainer.querySelectorAll('.image-wrapper img'));
+    if (event.key === 'd' && currentIndex < mediaElements.length - 1) {
+      currentIndex++; // Navigate to the next media
+      updateModalMedia(mediaElements, currentIndex, -100);
+    } else if (event.key === 'a' && currentIndex > 0) {
+      currentIndex--; // Navigate to the previous media
+      updateModalMedia(mediaElements, currentIndex, 100);
+    }
+  });
+
+  function updateModalMedia(mediaElements, index, diffX) {
+    const nextMedia = mediaElements[index];
+    modalImage.src = nextMedia.src;
+
+    // Add sliding animation
+    modalImage.style.transition = 'transform 0.3s ease';
+    modalImage.style.transform = `translateX(${diffX > 0 ? '100%' : '-100%'})`;
+    setTimeout(() => {
+      modalImage.style.transition = '';
+      modalImage.style.transform = 'translateX(0)';
+    }, 300);
+
+    scrollToMedia(index); // Scroll the background gallery to the current media
+  }
+
+  function scrollToMedia(index) {
+    const mediaElements = Array.from(state.waifuContainer.querySelectorAll('.image-wrapper'));
+    const targetMedia = mediaElements[index];
+    if (targetMedia) {
+      targetMedia.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+    }
+  }
 }
 
 // Call setupImageModal during initialization

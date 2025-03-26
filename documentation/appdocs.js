@@ -45,4 +45,16 @@ document.addEventListener("DOMContentLoaded", () => {
             history.pushState(null, null, ' '); // Clear the hash
         }
     });
+
+    // Add smooth scrolling to quick navigation links
+    navLinks.forEach((link) => {
+        link.addEventListener("click", (event) => {
+            event.preventDefault();
+            const targetId = link.getAttribute("href").substring(1);
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: "smooth" });
+            }
+        });
+    });
 });

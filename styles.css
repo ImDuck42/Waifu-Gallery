@@ -38,6 +38,16 @@ body {
   overflow-x: hidden;
 }
 
+/* Hide scrollbar for all elements */
+body, html {
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+}
+
+body::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
+}
+
 a {
   color: inherit;
   text-decoration: none;
