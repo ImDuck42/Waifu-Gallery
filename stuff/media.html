@@ -149,6 +149,7 @@
             <div>⚠️</div>
             <div>
                 <p>Failed to load media</p>
+                <p>Dont worry, this error is always here, dunno why</p>
                 <small id="errorText"></small>
             </div>
             <button onclick="validateAndLoad()">Try Again</button>
@@ -157,10 +158,8 @@
 
     <script>
     const extensions = {
-        images: ['.jpg', '.jpeg', '.png', '.webp', '.bmp', '.tiff', '.svg', 
-                 '.heic', '.heif', '.apng', '.gif'],
-        videos: ['.mp4', '.webm', '.mov', '.avi', '.flv', '.mkv', '.wmv', 
-                 '.m4v', '.mpg', '.mpeg', '.3gp', '.ogv']
+        images: ['.jpg', '.jpeg', '.png', '.webp', '.bmp', '.tiff', '.svg', '.heic', '.heif', '.apng', '.gif'],
+        videos: ['.mp4', '.webm', '.mov', '.avi', '.flv', '.mkv', '.wmv', '.m4v', '.mpg', '.mpeg', '.3gp', '.ogv']
     };
 
     function validateAndLoad() {

@@ -263,8 +263,9 @@ function displayWaifus(files) {
           <img src="${url}" type="image/png" alt="Failed to fetch image" loading="lazy">
         </div>`;
     } else {
+      // Return error but most likely an image type
       return `
-        <div class="image-wrapper" type="application/octet-stream">
+        <div class="image-wrapper" type="type="image/png">
           <img src="${url}" alt="Invalid media format" loading="lazy">
         </div>`;
     }
