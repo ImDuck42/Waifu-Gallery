@@ -324,7 +324,7 @@ function handleRedirects() {
   } else if (currentPath.endsWith('/json') || currentPath.endsWith('/json/')) {
     window.location.replace(`${state.basePath}/stuff/json.html`);
   } else if (currentPath.endsWith('/media') || currentPath.endsWith('/media/')) {
-    window.location.replace(`${state.basePath}/stuff/video.html`);
+    window.location.replace(`${state.basePath}/stuff/media.html`);
   } else if (currentPath.endsWith('/rawr') || currentPath.endsWith('/rawr/')) {
     window.location.replace(`https://www.yout-ube.com/watch?v=dQw4w9WgXcQ`);
   }
