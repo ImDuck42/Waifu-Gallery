@@ -322,7 +322,9 @@ function handleRedirects() {
   } else if (currentPath.endsWith('/contact') || currentPath.endsWith('/contact/')) {
     window.location.replace(`${state.basePath}/contact/indexcontact.html`);
   } else if (currentPath.endsWith('/json') || currentPath.endsWith('/json/')) {
-    window.location.replace(`${state.basePath}/stuff/json.html`); 
+    window.location.replace(`${state.basePath}/stuff/json.html`);
+  } else if (currentPath.endsWith('/media') || currentPath.endsWith('/video/')) {
+    window.location.replace(`${state.basePath}/stuff/video.html`);
   } else if (currentPath.endsWith('/rawr') || currentPath.endsWith('/rawr/')) {
     window.location.replace(`https://www.yout-ube.com/watch?v=dQw4w9WgXcQ`);
   }

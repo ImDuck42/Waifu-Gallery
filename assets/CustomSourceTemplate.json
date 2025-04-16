@@ -14,7 +14,7 @@
             "category": "nature",
             "information": "Natural landscapes and wildlife",
             "images": [
-                "https://example.com/nature1.jpg",
+                "https://example.com/nature1.mp4",
                 "https://example.com/nature2.jpg"
             ]
         },
@@ -33,7 +33,7 @@
             "information": "Explicit adult material",
             "images": [
                 "https://example.com/nsfw1.jpg",
-                "https://example.com/nsfw2.png"
+                "https://example.com/nsfw2.gif"
             ]
         },
         {
@@ -41,7 +41,7 @@
             "information": "Other sensitive content",
             "images": [
                 "https://example.com/sensitive1.jpg",
-                "https://example.com/sensitive2.png"
+                "https://example.com/sensitive2.mov"
             ]
         }
     ]

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Validator</title>
+    <style>
+    :root {
+        --bg-primary: #0f0f1a;
+        --bg-secondary: #1a1a2e;
+        --bg-element: #262639;
+        --accent-primary: #8c5eff;
+        --accent-secondary: #ff67d7;
+        --text-primary: #ffffff;
+        --text-secondary: #b8b8d0;
+        --border-radius: 12px;
+        --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        min-height: 100vh;
+        margin: 0;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 800px;
+        background: var(--bg-secondary);
+        padding: 2rem;
+        border-radius: var(--border-radius);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        margin-top: 2rem;
+    }
+
+    .input-group {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    input[type="text"] {
+        flex: 1;
+        padding: 0.8rem 1.2rem;
+        background: var(--bg-element);
+        border: none;
+        border-radius: var(--border-radius);
+        color: var(--text-primary);
+        font-size: 1rem;
+        transition: var(--transition);
+    }
+
+    input[type="text"]:focus {
+        outline: 2px solid var(--accent-primary);
+        box-shadow: 0 0 0 3px rgba(140, 94, 255, 0.2);
+    }
+
+    button {
+        padding: 0.8rem 1.5rem;
+        background: linear-gradient(120deg, var(--accent-primary), var(--accent-secondary));
+        color: var(--text-primary);
+        border: none;
+        border-radius: var(--border-radius);
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(140, 94, 255, 0.3);
+    }
+
+    .media-container {
+        position: relative;
+        width: 100%;
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        background: #000;
+        margin-top: 1.5rem;
+        min-height: 300px;
+    }
+
+    video, img {
+        width: 100%;
+        height: auto;
+        max-height: 60vh;
+        object-fit: contain;
+        border-radius: var(--border-radius);
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .error-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        padding: 2rem;
+        background: var(--bg-secondary);
+        border-radius: var(--border-radius);
+        margin-top: 1.5rem;
+        text-align: center;
+        border: 1px solid rgba(255, 71, 87, 0.3);
+    }
+
+    @media (max-width: 768px) {
+        body {
+            padding: 1rem;
+        }
+        
+        .container {
+            padding: 1.5rem;
+        }
+        
+        .input-group {
+            flex-direction: column;
+        }
+        
+        button {
+            width: 100%;
+        }
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="input-group">
+            <input type="text" id="mediaUrl" 
+                   placeholder="Enter image/video URL (e.g., .jpg, .mp4)">
+            <button onclick="validateAndLoad()">Test Media</button>
+        </div>
+
+        <div class="media-container">
+            <video id="videoPlayer" controls class="hidden"></video>
+            <img id="imagePreview" class="hidden" alt="Image preview">
+            <div id="loader" class="hidden">Loading...</div>
+        </div>
+
+        <div id="errorMessage" class="error-container hidden">
+            <div>⚠️</div>
+            <div>
+                <p>Failed to load media</p>
+                <small id="errorText"></small>
+            </div>
+            <button onclick="validateAndLoad()">Try Again</button>
+        </div>
+    </div>
+
+    <script>
+    const extensions = {
+        images: ['.jpg', '.jpeg', '.png', '.webp', '.bmp', '.tiff', '.svg', 
+                 '.heic', '.heif', '.apng', '.gif'],
+        videos: ['.mp4', '.webm', '.mov', '.avi', '.flv', '.mkv', '.wmv', 
+                 '.m4v', '.mpg', '.mpeg', '.3gp', '.ogv']
+    };
+
+    function validateAndLoad() {
+        const mediaUrl = document.getElementById('mediaUrl').value;
+        const videoPlayer = document.getElementById('videoPlayer');
+        const imagePreview = document.getElementById('imagePreview');
+        const errorMessage = document.getElementById('errorMessage');
+        const loader = document.getElementById('loader');
+
+        // Reset state
+        videoPlayer.classList.add('hidden');
+        imagePreview.classList.add('hidden');
+        errorMessage.classList.add('hidden');
+        loader.classList.remove('hidden');
+
+        if (!mediaUrl) {
+            showError('Please enter a URL');
+            return;
+        }
+
+        const urlValid = isValidMediaUrl(mediaUrl);
+        if (!urlValid.valid) {
+            showError(urlValid.message);
+            return;
+        }
+
+        if (urlValid.type === 'image') {
+            loadImage(mediaUrl);
+        } else {
+            loadVideo(mediaUrl);
+        }
+    }
+
+    function isValidMediaUrl(url) {
+        const lowerUrl = url.toLowerCase();
+        const isImage = extensions.images.some(ext => lowerUrl.endsWith(ext));
+        const isVideo = extensions.videos.some(ext => lowerUrl.endsWith(ext));
+        
+        if (!isImage && !isVideo) {
+            return {
+                valid: false,
+                message: 'Unsupported file format'
+            };
+        }
+        
+        try {
+            new URL(url);
+            return {
+                valid: true,
+                type: isImage ? 'image' : 'video'
+            };
+        } catch {
+            return {
+                valid: false,
+                message: 'Invalid URL format'
+            };
+        }
+    }
+
+    function loadImage(url) {
+        const imagePreview = document.getElementById('imagePreview');
+        const loader = document.getElementById('loader');
+        
+        imagePreview.onload = () => {
+            imagePreview.classList.remove('hidden');
+            loader.classList.add('hidden');
+        };
+        
+        imagePreview.onerror = () => {
+            showError('Failed to load image');
+            loader.classList.add('hidden');
+        };
+        
+        imagePreview.src = url;
+    }
+
+    function loadVideo(url) {
+        const videoPlayer = document.getElementById('videoPlayer');
+        const loader = document.getElementById('loader');
+        
+        videoPlayer.onloadeddata = () => {
+            videoPlayer.classList.remove('hidden');
+            loader.classList.add('hidden');
+        };
+        
+        videoPlayer.onerror = () => {
+            showError('Error loading video');
+            loader.classList.add('hidden');
+        };
+        
+        videoPlayer.src = url;
+        videoPlayer.load();
+    }
+
+    function showError(message) {
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+        errorText.textContent = message;
+        errorMessage.classList.remove('hidden');
+    }
+    </script>
+</body>
+</html>
