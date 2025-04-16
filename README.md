@@ -6,12 +6,11 @@
 
 ## ✨ Features
 
-- **Image Browsing**: Explore a vast collection of images and videos organized by category.
-- **Search Functionality**: Easily find images based on tags or categories.
 - **API Access**: Utilize the `/api` route for my own version of the [waifu.pics API documentation](https://waifu.pics/docs).
 - **Contact Page**: Reach out to the developers or provide feedback via the `/contact` page.
 - **Developer Tools**: Access secret developer tools through the `/rawr` route.
 - **Responsive Design**: Enjoy a seamless experience across desktops, tablets, and smartphones.
+- **Custom URL redirection**: Allowes for the use of path like `/api`.
 
 ---
 
@@ -115,6 +114,10 @@ Learn more about how to use them in our [documentation](https://imduck42.github.
 }
 ```
 </details>
+
+- **Custom sources** are saved in local storage and if imported, allowes for the usage of direct URL's for all users having the same Source name/category
+    - https://imduck42.github.io/Waifu-Gallery/`type`/`Source%20Name`:`Category`
+    - (%20 for spaces)
 
 ---
 
