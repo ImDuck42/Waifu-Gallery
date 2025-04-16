@@ -116,7 +116,7 @@ Learn more about how to use them in our [documentation](https://imduck42.github.
 </details>
 
 - **Custom sources** are saved in local storage and if imported, allowes for the usage of direct URL's for all users having the same Source name/category
-    - https://imduck42.github.io/Waifu-Gallery/`type`/`Source%20Name`:`Category`
+    - https://imduck42.github.io/Waifu-Gallery/type/Source%20Name:Category
     - (%20 for spaces)
 
 ---
