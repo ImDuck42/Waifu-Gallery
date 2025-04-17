@@ -168,7 +168,17 @@ function parseURL() {
   };
 }
 
+// validateAndApplyURLParams to handle import URLs
 function validateAndApplyURLParams() {
+  const fullUrl = window.location.href;
+  
+  // If URL contains import, handle it separately
+  if (fullUrl.includes('/import:')) {
+    handleImportUrl(fullUrl);
+    return true;
+  }
+  
+  // Original function logic for regular URLs
   const { type, category } = parseURL();
   const validTypes = ['nsfw', 'sfw'];
   
@@ -317,6 +327,13 @@ function handleError(error) {
 // URL redirection logic
 function handleRedirects() {
   const currentPath = window.location.pathname;
+  const fullUrl = window.location.href;
+
+  // Handle import URLs
+  if (fullUrl.includes('/import:')) {
+    handleImportUrl(fullUrl);
+    return;
+  }
 
   if (currentPath.endsWith('/api') || currentPath.endsWith('/api/')) {
     window.location.replace(`${state.basePath}/documentation/indexdocs.html`);
@@ -328,6 +345,92 @@ function handleRedirects() {
     window.location.replace(`${state.basePath}/stuff/media.html`);
   } else if (currentPath.endsWith('/rawr') || currentPath.endsWith('/rawr/')) {
     window.location.replace(`https://www.yout-ube.com/watch?v=dQw4w9WgXcQ`);
+  }
+}
+
+// Add a new function to handle import URLs
+async function handleImportUrl(fullUrl) {
+  try {
+    // Extract JSON URL and additional parameters
+    const importMatch = fullUrl.match(/\/import:([^\/]+)(\/.*)?$/);
+    if (!importMatch) return;
+    
+    const jsonUrl = decodeURIComponent(importMatch[1]);
+    const additionalPath = importMatch[2] || '';
+    
+    // Show loading indicator
+    showLoadingSkeleton(9);
+    state.waifuContainer.innerHTML = `
+      <div class="error-container">
+        <div class="error-icon">
+          <img src="./assets/kurukuruAPNG.png" alt="Loading">
+        </div>
+        <p class="error-text">Importing JSON from: ${jsonUrl}</p>
+      </div>`;
+    
+    // Fetch and process JSON
+    const response = await fetch(jsonUrl);
+    if (!response.ok) throw new Error(`Failed to fetch JSON: ${response.status}`);
+    
+    const sourceData = await response.json();
+    
+    // Validate source structure
+    if (!validateSourceFormat(sourceData)) {
+      showError("Invalid source format. Please use the correct template.", './assets/oops.png');
+      return;
+    }
+    
+    // Process and store custom sources
+    processCustomSources(sourceData);
+    
+    // Show success message
+    showImportSuccess(`Successfully imported ${countTotalImages(sourceData)} images in ${countCategories(sourceData)} categories.`);
+    
+    // Check for additional path to open a specific category
+    if (additionalPath) {
+      handleAdditionalPath(additionalPath);
+    } else {
+      // Clear URL and show success message
+      window.history.replaceState({}, '', state.basePath || '/');
+      state.waifuContainer.innerHTML = `
+        <div class="error-container">
+          <div class="error-icon">
+            <img src="./assets/kurukuruAPNG.png" alt="Success">
+          </div>
+          <p class="error-text">JSON imported successfully! Select a category to continue.</p>
+        </div>`;
+    }
+  } catch (error) {
+    window.history.replaceState({}, '', state.basePath || '/');
+    showError(`Error importing JSON: ${error.message}`, './assets/smthnwrong.png');
+  }
+}
+
+// Function to handle additional path parameters
+function handleAdditionalPath(path) {
+  // Extract type and category from path
+  const pathSegments = path.split('/').filter(segment => segment);
+  
+  if (pathSegments.length >= 2) {
+    const type = pathSegments[0];
+    const category = pathSegments[1];
+    
+    if ((type === 'sfw' || type === 'nsfw') && category) {
+      // Set UI according to the path
+      state.nsfwToggle.checked = type === 'nsfw';
+      updateCategoriesWithCustomSources();
+      
+      // Set the category in dropdown and display waifus
+      setTimeout(() => {
+        state.categoryDropdown.value = category;
+        if (state.categoryDropdown.value === category) {
+          fetchAndDisplayWaifus();
+          updateURL(type, category);
+        } else {
+          showError(`Category "${category}" not found in the imported source.`, './assets/oops.png');
+        }
+      }, 100);
+    }
   }
 }
 
