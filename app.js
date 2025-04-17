@@ -348,14 +348,14 @@ function handleRedirects() {
   }
 }
 
-// Add a new function to handle import URLs
+// Function to handle import URLs
 async function handleImportUrl(fullUrl) {
   try {
     // Extract JSON URL and additional parameters
     const importMatch = fullUrl.match(/\/import:([^\/]+)(\/.*)?$/);
     if (!importMatch) return;
     
-    const jsonUrl = decodeURIComponent(importMatch[1]);
+    let jsonUrl = decodeURIComponent(importMatch[1]);
     const additionalPath = importMatch[2] || '';
     
     // Show loading indicator
@@ -368,11 +368,31 @@ async function handleImportUrl(fullUrl) {
         <p class="error-text">Importing JSON from: ${jsonUrl}</p>
       </div>`;
     
+    // If GitHub URL, ensure it's the raw format
+    if (jsonUrl.includes('github.com') && !jsonUrl.includes('raw.githubusercontent.com')) {
+      jsonUrl = jsonUrl.replace('github.com', 'raw.githubusercontent.com')
+                       .replace('/blob/', '/');
+    }
+    
+    // Add no-cors fetch options
+    const fetchOptions = {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json'
+      },
+      mode: 'cors'
+    };
+    
     // Fetch and process JSON
-    const response = await fetch(jsonUrl);
+    const response = await fetch(jsonUrl, fetchOptions);
     if (!response.ok) throw new Error(`Failed to fetch JSON: ${response.status}`);
     
-    const sourceData = await response.json();
+    let sourceData;
+    try {
+      sourceData = await response.json();
+    } catch (e) {
+      throw new Error(`Invalid JSON format: ${e.message}`);
+    }
     
     // Validate source structure
     if (!validateSourceFormat(sourceData)) {
@@ -401,9 +421,69 @@ async function handleImportUrl(fullUrl) {
         </div>`;
     }
   } catch (error) {
+    console.error("Import error:", error);
     window.history.replaceState({}, '', state.basePath || '/');
     showError(`Error importing JSON: ${error.message}`, './assets/smthnwrong.png');
   }
+}
+
+// Add a fallback fetch method using JSONP approach
+function fetchJSONP(url) {
+  return new Promise((resolve, reject) => {
+    // Create script element
+    const script = document.createElement('script');
+    
+    // Create a unique callback name
+    const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+    
+    // Set callback function
+    window[callbackName] = function(data) {
+      // Clean up
+      delete window[callbackName];
+      document.body.removeChild(script);
+      resolve(data);
+    };
+    
+    // Set script attributes
+    script.src = `${url}${url.includes('?') ? '&' : '?'}callback=${callbackName}`;
+    script.onerror = reject;
+    
+    // Add to document to start request
+    document.body.appendChild(script);
+    
+    // Set timeout
+    setTimeout(() => {
+      reject(new Error('JSONP request timed out'));
+      if (window[callbackName]) delete window[callbackName];
+      if (document.body.contains(script)) document.body.removeChild(script);
+    }, 10000);
+  });
+}
+
+// Add a proxy fallback method for handleImportUrl
+async function tryFetchWithProxy(jsonUrl) {
+  // List of public CORS proxies to try
+  const proxies = [
+    'https://api.allorigins.win/raw?url=',
+    'https://cors-anywhere.herokuapp.com/',
+    'https://crossorigin.me/'
+  ];
+  
+  // Try each proxy in order
+  for (const proxy of proxies) {
+    try {
+      const response = await fetch(proxy + encodeURIComponent(jsonUrl));
+      if (response.ok) {
+        return await response.json();
+      }
+    } catch (error) {
+      console.warn(`Proxy ${proxy} failed:`, error);
+      // Continue to next proxy
+    }
+  }
+  
+  // If all proxies fail, throw error
+  throw new Error('All proxy attempts failed');
 }
 
 // Function to handle additional path parameters
