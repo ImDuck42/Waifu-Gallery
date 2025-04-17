@@ -368,12 +368,6 @@ async function handleImportUrl(fullUrl) {
         <p class="error-text">Importing JSON from: ${jsonUrl}</p>
       </div>`;
     
-    // If GitHub URL, ensure it's the raw format
-    if (jsonUrl.includes('github.com') && !jsonUrl.includes('raw.githubusercontent.com')) {
-      jsonUrl = jsonUrl.replace('github.com', 'raw.githubusercontent.com')
-                       .replace('/blob/', '/');
-    }
-    
     // Add no-cors fetch options
     const fetchOptions = {
       method: 'GET',
