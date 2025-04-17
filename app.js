@@ -168,17 +168,7 @@ function parseURL() {
   };
 }
 
-// validateAndApplyURLParams to handle import URLs
 function validateAndApplyURLParams() {
-  const fullUrl = window.location.href;
-  
-  // If URL contains import, handle it separately
-  if (fullUrl.includes('/import:')) {
-    handleImportUrl(fullUrl);
-    return true;
-  }
-  
-  // Original function logic for regular URLs
   const { type, category } = parseURL();
   const validTypes = ['nsfw', 'sfw'];
   
@@ -327,13 +317,6 @@ function handleError(error) {
 // URL redirection logic
 function handleRedirects() {
   const currentPath = window.location.pathname;
-  const fullUrl = window.location.href;
-
-  // Handle import URLs
-  if (fullUrl.includes('/import:')) {
-    handleImportUrl(fullUrl);
-    return;
-  }
 
   if (currentPath.endsWith('/api') || currentPath.endsWith('/api/')) {
     window.location.replace(`${state.basePath}/documentation/indexdocs.html`);
@@ -345,154 +328,6 @@ function handleRedirects() {
     window.location.replace(`${state.basePath}/stuff/media.html`);
   } else if (currentPath.endsWith('/rawr') || currentPath.endsWith('/rawr/')) {
     window.location.replace(`https://www.yout-ube.com/watch?v=dQw4w9WgXcQ`);
-  }
-}
-
-// Function to handle import URLs
-// Modify the handleImportUrl function to use the simpler approach
-async function handleImportUrl(fullUrl) {
-  try {
-    // Extract JSON URL and additional parameters
-    const importMatch = fullUrl.match(/\/import:([^\/]+)(\/.*)?$/);
-    if (!importMatch) return;
-    
-    let jsonUrl = decodeURIComponent(importMatch[1]);
-    const additionalPath = importMatch[2] || '';
-    
-    // Show loading indicator
-    showLoadingSkeleton(9);
-    state.waifuContainer.innerHTML = `
-      <div class="error-container">
-        <div class="error-icon">
-          <img src="./assets/kurukuruAPNG.png" alt="Loading">
-        </div>
-        <p class="error-text">Importing JSON from: ${jsonUrl}</p>
-      </div>`;
-    
-    // Use the simpler fetch approach that worked in your loadJSON function
-    const response = await fetch(jsonUrl);
-    if (!response.ok) throw new Error(`Failed to fetch JSON: ${response.status}`);
-    
-    // Parse the JSON
-    const sourceData = await response.json();
-    
-    // Validate source structure
-    if (!validateSourceFormat(sourceData)) {
-      showError("Invalid source format. Please use the correct template.", './assets/oops.png');
-      return;
-    }
-    
-    // Process and store custom sources
-    processCustomSources(sourceData);
-    
-    // Show success message
-    showImportSuccess(`Successfully imported ${countTotalImages(sourceData)} images in ${countCategories(sourceData)} categories.`);
-    
-    // Check for additional path to open a specific category
-    if (additionalPath) {
-      handleAdditionalPath(additionalPath);
-    } else {
-      // Clear URL and show success message
-      window.history.replaceState({}, '', state.basePath || '/');
-      state.waifuContainer.innerHTML = `
-        <div class="error-container">
-          <div class="error-icon">
-            <img src="./assets/kurukuruAPNG.png" alt="Success">
-          </div>
-          <p class="error-text">JSON imported successfully! Select a category to continue.</p>
-        </div>`;
-    }
-  } catch (error) {
-    console.error("Import error:", error);
-    window.history.replaceState({}, '', state.basePath || '/');
-    showError(`Error importing JSON: ${error.message}`, './assets/smthnwrong.png');
-  }
-}
-
-// Add a fallback fetch method using JSONP approach
-function fetchJSONP(url) {
-  return new Promise((resolve, reject) => {
-    // Create script element
-    const script = document.createElement('script');
-    
-    // Create a unique callback name
-    const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
-    
-    // Set callback function
-    window[callbackName] = function(data) {
-      // Clean up
-      delete window[callbackName];
-      document.body.removeChild(script);
-      resolve(data);
-    };
-    
-    // Set script attributes
-    script.src = `${url}${url.includes('?') ? '&' : '?'}callback=${callbackName}`;
-    script.onerror = reject;
-    
-    // Add to document to start request
-    document.body.appendChild(script);
-    
-    // Set timeout
-    setTimeout(() => {
-      reject(new Error('JSONP request timed out'));
-      if (window[callbackName]) delete window[callbackName];
-      if (document.body.contains(script)) document.body.removeChild(script);
-    }, 10000);
-  });
-}
-
-// Add a proxy fallback method for handleImportUrl
-async function tryFetchWithProxy(jsonUrl) {
-  // List of public CORS proxies to try
-  const proxies = [
-    'https://api.allorigins.win/raw?url=',
-    'https://cors-anywhere.herokuapp.com/',
-    'https://crossorigin.me/'
-  ];
-  
-  // Try each proxy in order
-  for (const proxy of proxies) {
-    try {
-      const response = await fetch(proxy + encodeURIComponent(jsonUrl));
-      if (response.ok) {
-        return await response.json();
-      }
-    } catch (error) {
-      console.warn(`Proxy ${proxy} failed:`, error);
-      // Continue to next proxy
-    }
-  }
-  
-  // If all proxies fail, throw error
-  throw new Error('All proxy attempts failed');
-}
-
-// Function to handle additional path parameters
-function handleAdditionalPath(path) {
-  // Extract type and category from path
-  const pathSegments = path.split('/').filter(segment => segment);
-  
-  if (pathSegments.length >= 2) {
-    const type = pathSegments[0];
-    const category = pathSegments[1];
-    
-    if ((type === 'sfw' || type === 'nsfw') && category) {
-      // Set UI according to the path
-      state.nsfwToggle.checked = type === 'nsfw';
-      updateCategoriesWithCustomSources();
-      
-      // Set the category in dropdown and display waifus
-      setTimeout(() => {
-        state.categoryDropdown.value = category;
-        if (state.categoryDropdown.value === category) {
-          fetchAndDisplayWaifus();
-          updateURL(type, category);
-        } else {
-          showError(`Category "${category}" not found in the imported source.`, './assets/oops.png');
-        }
-      }, 100);
-    }
   }
 }
 
