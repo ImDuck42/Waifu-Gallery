@@ -349,6 +349,7 @@ function handleRedirects() {
 }
 
 // Function to handle import URLs
+// Modify the handleImportUrl function to use the simpler approach
 async function handleImportUrl(fullUrl) {
   try {
     // Extract JSON URL and additional parameters
@@ -368,25 +369,12 @@ async function handleImportUrl(fullUrl) {
         <p class="error-text">Importing JSON from: ${jsonUrl}</p>
       </div>`;
     
-    // Add no-cors fetch options
-    const fetchOptions = {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json'
-      },
-      mode: 'cors'
-    };
-    
-    // Fetch and process JSON
-    const response = await fetch(jsonUrl, fetchOptions);
+    // Use the simpler fetch approach that worked in your loadJSON function
+    const response = await fetch(jsonUrl);
     if (!response.ok) throw new Error(`Failed to fetch JSON: ${response.status}`);
     
-    let sourceData;
-    try {
-      sourceData = await response.json();
-    } catch (e) {
-      throw new Error(`Invalid JSON format: ${e.message}`);
-    }
+    // Parse the JSON
+    const sourceData = await response.json();
     
     // Validate source structure
     if (!validateSourceFormat(sourceData)) {
