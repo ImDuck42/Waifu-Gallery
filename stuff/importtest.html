@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Import JSON Viewer</title>
+  <style>
+    body {
+      font-family: monospace;
+      background: #f9f9f9;
+      padding: 20px;
+    }
+    #json-content {
+      white-space: pre-wrap;
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Imported JSON Content</h1>
+  <div id="json-content">Loading...</div>
+
+  <script>
+    async function loadJSON() {
+      const match = window.location.pathname.match(/\/import:(.+)$/);
+      if (!match) {
+        document.getElementById('json-content').textContent = "No '/import:<url>' found in the URL path.";
+        return;
+      }
+
+      const jsonUrl = decodeURIComponent(match[1]);
+
+      try {
+        const res = await fetch(jsonUrl);
+        if (!res.ok) throw new Error("Failed to fetch: " + res.status);
+        const data = await res.json();
+        document.getElementById('json-content').textContent = JSON.stringify(data, null, 2);
+      } catch (e) {
+        document.getElementById('json-content').textContent = "Error: " + e.message;
+      }
+    }
+
+    loadJSON();
+  </script>
+</body>
+</html>

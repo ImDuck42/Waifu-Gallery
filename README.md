@@ -71,16 +71,17 @@ Learn more about how to use them in our [documentation](https://imduck42.github.
             "title": "Custom Source Template",
             "description": "A template for creating custom sources",
             "version": "69.42.0",
-            "author": "ImDuck42 (Creator)",
-            "contact": "Hu7ao on Discord"
+            "author": "ImDuck42(Creator)",
+            "contact": "hu7ao on Discord"
         }
     ],
+
     "sfw": [
         {
             "category": "nature",
             "information": "Natural landscapes and wildlife",
             "images": [
-                "https://example.com/nature1.jpg",
+                "https://example.com/nature1.mp4",
                 "https://example.com/nature2.jpg"
             ]
         },
@@ -89,17 +90,17 @@ Learn more about how to use them in our [documentation](https://imduck42.github.
             "information": "Anime artwork and characters",
             "images": [
                 "https://example.com/anime1.png",
-                "https://example.com/anime2.jpg"
+                "https://example.com/anime2.webp"
             ]
         }
     ],
     "nsfw": [
         {
-            "category": "adult content",
+            "category": "adult Content",
             "information": "Explicit adult material",
             "images": [
                 "https://example.com/nsfw1.jpg",
-                "https://example.com/nsfw2.png"
+                "https://example.com/nsfw2.gif"
             ]
         },
         {
@@ -107,7 +108,7 @@ Learn more about how to use them in our [documentation](https://imduck42.github.
             "information": "Other sensitive content",
             "images": [
                 "https://example.com/sensitive1.jpg",
-                "https://example.com/sensitive2.png"
+                "https://example.com/sensitive2.mov"
             ]
         }
     ]
